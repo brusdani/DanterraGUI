@@ -3,6 +3,6 @@ module cz.vse.danterragui {
     requires javafx.fxml;
 
 
-    opens cz.vse.danterragui to javafx.fxml;
-    exports cz.vse.danterragui;
+    opens cz.vse.danterragui.main to javafx.fxml;
+    exports cz.vse.danterragui.main;
 }
