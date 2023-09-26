@@ -2,7 +2,10 @@ package cz.vse.danterragui.main;
 
 import cz.vse.danterragui.logika.Hra;
 import cz.vse.danterragui.logika.IHra;
+import cz.vse.danterragui.logika.Prostor;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -16,13 +19,25 @@ public class HomeController {
     private Button enterButton;
     @FXML
     private TextArea textAreaOutput;
+    @FXML
+    private ListView exitPanel;
 
     private IHra hra = new Hra();
+
+    private ObservableList<Prostor> exitList = FXCollections.observableArrayList();
 
     @FXML
     private void initialize(){
         textAreaOutput.appendText(hra.vratUvitani()+"\n");
+        textAreaOutput.appendText(hra.poem()+"\n");
+        textAreaOutput.appendText(hra.intro()+"\n");
         Platform.runLater(() -> playerInput.requestFocus());
+        exitPanel.setItems(exitList);
+    }
+    @FXML
+    private void updateExitList(){
+        exitList.clear();
+        exitList.addAll(hra.getHerniPlan().getAktualniProstor().getVychody());
     }
 
     @FXML
