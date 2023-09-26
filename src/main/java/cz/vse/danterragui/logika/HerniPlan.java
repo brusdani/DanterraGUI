@@ -1,9 +1,9 @@
 package cz.vse.danterragui.logika;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import cz.vse.danterragui.main.Pozorovatel;
+import cz.vse.danterragui.main.PredmetPozorovani;
+
+import java.util.*;
 
 /**
  *  Class HerniPlan - třída představující mapu a stav adventury.
@@ -16,9 +16,11 @@ import java.util.Map;
  *@author     Michael Kolling, Lubos Pavlicek, Jarmila Pavlickova
  *@version    pro školní rok 2016/2017
  */
-public class HerniPlan {
+public class HerniPlan implements PredmetPozorovani {
 
     private Prostor aktualniProstor;
+
+    private Set<Pozorovatel> seznamPozorovatelu = new HashSet<>();
     private Prostor teleport;
     private Prostor winRoom;
     private Thing chakram;
@@ -247,6 +249,13 @@ public class HerniPlan {
      */
     public void setAktualniProstor(Prostor prostor) {
         aktualniProstor = prostor;
+        notifyObserver();
+    }
+
+    private void notifyObserver() {
+        for(Pozorovatel pozorovatel : seznamPozorovatelu) {
+            pozorovatel.aktualizuj();
+        }
     }
 
     /**
@@ -289,4 +298,8 @@ public class HerniPlan {
         return prostorMap;
     }
 
+    @Override
+    public void registruj(Pozorovatel pozorovatel) {
+        seznamPozorovatelu.add(pozorovatel);
+    }
 }

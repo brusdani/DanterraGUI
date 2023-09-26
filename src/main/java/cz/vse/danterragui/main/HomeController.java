@@ -12,7 +12,7 @@ import javafx.scene.control.*;
 
 import java.util.Optional;
 
-public class HomeController {
+public class HomeController implements Pozorovatel {
     @FXML
     private TextField playerInput;
     @FXML
@@ -33,6 +33,7 @@ public class HomeController {
         textAreaOutput.appendText(hra.intro()+"\n");
         Platform.runLater(() -> playerInput.requestFocus());
         exitPanel.setItems(exitList);
+        hra.getHerniPlan().registruj(this);
     }
     @FXML
     private void updateExitList(){
@@ -47,6 +48,7 @@ public class HomeController {
         String result = hra.zpracujPrikaz(command);
         textAreaOutput.appendText(result+"\n");
         playerInput.clear();
+        hra.getHerniPlan().getAktualniProstor().registruj(this);
 
         if(hra.konecHry()){
             textAreaOutput.appendText(hra.vratEpilog());
@@ -61,5 +63,16 @@ public class HomeController {
         if (result.isPresent() && result.get() == ButtonType.OK) {
             Platform.exit();
         }
+    }
+
+
+    @Override
+    public void aktualizuj() {
+        //System.out.printf("Aktualizuji");
+        if (hra.getHerniPlan().getAktualniProstor().isWasScanned()){
+            updateExitList();
+        } else
+            exitList.clear();
+
     }
 }

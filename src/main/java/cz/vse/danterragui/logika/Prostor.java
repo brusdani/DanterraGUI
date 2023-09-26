@@ -1,5 +1,8 @@
 package cz.vse.danterragui.logika;
 
+import cz.vse.danterragui.main.Pozorovatel;
+import cz.vse.danterragui.main.PredmetPozorovani;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
@@ -25,7 +28,8 @@ import java.util.stream.Collectors;
  * Updated in May 2023
  * @author Daniel Brus
  */
-public class Prostor {
+public class Prostor implements PredmetPozorovani {
+    private Set<Pozorovatel> seznamPozorovatelu = new HashSet<>();
 
     private String nazev;
     private String aibaDescription;
@@ -130,7 +134,15 @@ public class Prostor {
      * @param wasScanned
      */
     public void setWasScanned(boolean wasScanned) {
+        //System.out.printf("Was scanned was called");
         this.wasScanned = wasScanned;
+        notifyObserver();
+    }
+
+    private void notifyObserver() {
+        for(Pozorovatel pozorovatel : seznamPozorovatelu) {
+            pozorovatel.aktualizuj();
+        }
     }
 
     /**
@@ -354,7 +366,10 @@ public class Prostor {
     }
     @Override
     public String toString(){
-        return nazev;
+        if (isLocked()){
+            return nazev + "(Locked)";
+        } else
+            return nazev;
     }
     /**
      * Vrací prostor, který sousedí s aktuálním prostorem a jehož název je zadán
@@ -397,5 +412,10 @@ public class Prostor {
      */
     public Collection<Prostor> getVychody() {
         return Collections.unmodifiableCollection(vychody);
+    }
+
+    @Override
+    public void registruj(Pozorovatel pozorovatel) {
+        seznamPozorovatelu.add(pozorovatel);
     }
 }
