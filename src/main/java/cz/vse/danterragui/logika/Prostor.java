@@ -65,8 +65,8 @@ public class Prostor implements PredmetPozorovani {
      */
 
     public void setLock(boolean locked) {
-
         this.locked = locked;
+        notifyObserver();
     }
 
     /**
@@ -140,6 +140,7 @@ public class Prostor implements PredmetPozorovani {
     }
 
     private void notifyObserver() {
+        System.out.println("Observer notified");
         for(Pozorovatel pozorovatel : seznamPozorovatelu) {
             pozorovatel.aktualizuj();
         }

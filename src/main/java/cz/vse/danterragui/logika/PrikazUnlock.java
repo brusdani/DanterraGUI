@@ -1,5 +1,7 @@
 package cz.vse.danterragui.logika;
 
+import cz.vse.danterragui.main.HomeController;
+
 /**
  * Class PrikazUnlock - Implements unlock command for the game
  * unlocks door that has been previously locked

@@ -49,6 +49,7 @@ public class HomeController implements Pozorovatel {
         textAreaOutput.appendText(result+"\n");
         playerInput.clear();
         hra.getHerniPlan().getAktualniProstor().registruj(this);
+        exitPanel.refresh();
 
         if(hra.konecHry()){
             textAreaOutput.appendText(hra.vratEpilog());
@@ -75,4 +76,5 @@ public class HomeController implements Pozorovatel {
             exitList.clear();
 
     }
+
 }
