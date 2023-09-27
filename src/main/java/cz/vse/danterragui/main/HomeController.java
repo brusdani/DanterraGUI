@@ -2,6 +2,7 @@ package cz.vse.danterragui.main;
 
 import cz.vse.danterragui.logika.Hra;
 import cz.vse.danterragui.logika.IHra;
+import cz.vse.danterragui.logika.PrikazJdi;
 import cz.vse.danterragui.logika.Prostor;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -9,6 +10,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 
 import java.util.Optional;
 
@@ -20,7 +22,7 @@ public class HomeController implements Pozorovatel {
     @FXML
     private TextArea textAreaOutput;
     @FXML
-    private ListView exitPanel;
+    private ListView<Prostor> exitPanel;
 
     private IHra hra = new Hra();
 
@@ -44,19 +46,26 @@ public class HomeController implements Pozorovatel {
     @FXML
     private void onEnterButtonClick(ActionEvent event){
         String command = playerInput.getText();
-        textAreaOutput.appendText(">"+ command + "\n");
-        String result = hra.zpracujPrikaz(command);
-        textAreaOutput.appendText(result+"\n");
         playerInput.clear();
         hra.getHerniPlan().getAktualniProstor().registruj(this);
         exitPanel.refresh();
+
+        processCommand(command);
+    }
+
+    private void processCommand(String command) {
+        textAreaOutput.appendText(">"+ command + "\n");
+        String result = hra.zpracujPrikaz(command);
+        textAreaOutput.appendText(result+"\n");
 
         if(hra.konecHry()){
             textAreaOutput.appendText(hra.vratEpilog());
             playerInput.setDisable(true);
             enterButton.setDisable(true);
+            exitPanel.setDisable(true);
         }
     }
+
     @FXML
     public void terminateGame(ActionEvent event){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION,"Are you sure you want to quit the game?");
@@ -75,6 +84,13 @@ public class HomeController implements Pozorovatel {
         } else
             exitList.clear();
 
+    }
+    @FXML
+    private void clickExitPanel(MouseEvent mouseEvent){
+        Prostor destination = exitPanel.getSelectionModel().getSelectedItem();
+        if (destination == null) return;
+        String command = PrikazJdi.NAZEV + " " + destination;
+        processCommand(command);
     }
 
 }
