@@ -8,11 +8,13 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cz.vse.danterragui.main.HomeController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1282.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cz.vse.danterragui.main.HomeController">
    <children>
       <MenuBar prefHeight="27.0" prefWidth="1280.0">
         <menus>
@@ -24,10 +26,10 @@
           </Menu>
         </menus>
       </MenuBar>
-      <AnchorPane layoutX="360.0" layoutY="29.0" prefHeight="690.0" prefWidth="536.0">
+      <AnchorPane layoutX="360.0" layoutY="29.0" prefHeight="690.0" prefWidth="440.0">
          <children>
-            <TextArea fx:id="textAreaOutput" editable="false" prefHeight="336.0" prefWidth="566.0" />
-            <HBox layoutX="30.0" layoutY="643.0" prefHeight="46.0" prefWidth="536.0" spacing="10.0">
+            <TextArea fx:id="textAreaOutput" editable="false" prefHeight="336.0" prefWidth="508.0" />
+            <HBox layoutX="4.0" layoutY="643.0" prefHeight="46.0" prefWidth="508.0" spacing="10.0">
                <children>
                   <TextField fx:id="playerInput" onAction="#onEnterButtonClick" prefHeight="26.0" prefWidth="445.0" HBox.hgrow="ALWAYS" />
                   <Button fx:id="enterButton" mnemonicParsing="false" onAction="#onEnterButtonClick" prefHeight="26.0" prefWidth="71.0" text="Enter" />
@@ -36,17 +38,39 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding>
             </HBox>
-            <AnchorPane layoutY="337.0" prefHeight="293.0" prefWidth="566.0">
+            <AnchorPane layoutY="337.0" prefHeight="295.0" prefWidth="483.0">
                <children>
                   <ImageView fx:id="npcImage" fitHeight="145.0" fitWidth="222.0" pickOnBounds="true" preserveRatio="true" />
-                  <TextArea fx:id="npcDialogue" layoutX="-7.0" layoutY="143.0" prefHeight="152.0" prefWidth="566.0" />
+                  <TextArea fx:id="npcDialogue" layoutX="-7.0" layoutY="143.0" prefHeight="152.0" prefWidth="514.0" />
                </children>
             </AnchorPane>
          </children>
       </AnchorPane>
-      <AnchorPane layoutX="926.0" layoutY="30.0" prefHeight="690.0" prefWidth="354.0">
+      <AnchorPane layoutX="877.0" layoutY="29.0" prefHeight="690.0" prefWidth="408.0">
          <children>
-            <ListView fx:id="exitPanel" layoutY="230.0" onMouseClicked="#clickExitPanel" prefHeight="323.0" prefWidth="354.0" />
+            <ListView fx:id="exitPanel" layoutX="3.0" layoutY="373.0" onMouseClicked="#clickExitPanel" prefHeight="265.0" prefWidth="394.0" />
+            <TitledPane animated="false" layoutX="-4.0" prefHeight="336.0" prefWidth="402.0" text="Minimap">
+               <content>
+                  <HBox alignment="CENTER" prefHeight="310.0" prefWidth="392.0">
+                     <children>
+                        <AnchorPane prefHeight="290.0" prefWidth="428.0">
+                           <children>
+                              <ImageView fitHeight="241.0" fitWidth="378.0" layoutX="6.0" layoutY="32.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@HerniPlan/DanterraMap1.jpg" />
+                                 </image>
+                              </ImageView>
+                              <ImageView fitHeight="34.0" fitWidth="42.0" layoutX="125.0" layoutY="145.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@Player/Player2.jpg" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </HBox>
+               </content>
+            </TitledPane>
          </children>
       </AnchorPane>
    </children>
