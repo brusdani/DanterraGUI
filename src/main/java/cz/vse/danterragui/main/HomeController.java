@@ -6,11 +6,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Point2D;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 public class HomeController{
@@ -26,10 +29,14 @@ public class HomeController{
     private TextArea npcDialogue;
     @FXML
     private ImageView npcImage;
+    @FXML
+    private ImageView player;
 
     private IHra hra = new Hra();
 
     private ObservableList<Prostor> exitList = FXCollections.observableArrayList();
+
+    private Map<String, Point2D> roomCoordinates = new HashMap<>();
     private Image aibaImage = new Image("file:///C:/Users/Daniel/Pictures/Danterra_Pictures/Aiba.jpg");
     private Image ghostImage = new Image("file:///C:/Users/Daniel/Pictures/Danterra_Pictures/Ghost.jpg");
 
@@ -40,13 +47,37 @@ public class HomeController{
         textAreaOutput.appendText(hra.intro()+"\n");
         Platform.runLater(() -> playerInput.requestFocus());
         exitPanel.setItems(exitList);
-        hra.getHerniPlan().registruj(ZmenaHry.ZMENA_MISTNOSTI,() -> aktualizuj());
+        hra.getHerniPlan().registruj(ZmenaHry.ZMENA_MISTNOSTI,() -> {
+            aktualizuj();
+            updatePlayerLocation();
+        });
         //hra.registruj(ZmenaHry.KONEC_HRY, () -> updateGameEnding());
+        setRoomCoordinates();
+
     }
+
+    private void setRoomCoordinates() {
+        roomCoordinates.put("hall", new Point2D(125,145));
+        roomCoordinates.put("cellar", new Point2D(127,59));
+        roomCoordinates.put("tower", new Point2D(23,145));
+        roomCoordinates.put("treasure_room", new Point2D(14,64));
+        roomCoordinates.put("gate", new Point2D(229,134));
+        roomCoordinates.put("forest", new Point2D(231,217));
+        roomCoordinates.put("cliffs", new Point2D(144,224));
+        roomCoordinates.put("village", new Point2D(230,58));
+        roomCoordinates.put("pub", new Point2D(300,56));
+    }
+
     @FXML
     private void updateExitList(){
         exitList.clear();
         exitList.addAll(hra.getHerniPlan().getAktualniProstor().getVychody());
+    }
+
+    private void updatePlayerLocation(){
+        String prostor = hra.getHerniPlan().getAktualniProstor().getNazev();
+        player.setLayoutX(roomCoordinates.get(prostor).getX());
+        player.setLayoutY(roomCoordinates.get(prostor).getY());
     }
 
     @FXML
@@ -120,6 +151,9 @@ public class HomeController{
         if (destination == null) return;
         String command = PrikazJdi.NAZEV + " " + destination;
         processCommand(command);
+        hra.getHerniPlan().getAktualniProstor().registruj(ZmenaHry.STAV_HRY,() -> aktualizuj());
+        exitPanel.refresh();
+
     }
 
 }

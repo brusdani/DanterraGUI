@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -28,7 +29,7 @@
       </MenuBar>
       <AnchorPane layoutX="360.0" layoutY="29.0" prefHeight="690.0" prefWidth="440.0">
          <children>
-            <TextArea fx:id="textAreaOutput" editable="false" prefHeight="336.0" prefWidth="508.0" />
+            <TextArea fx:id="textAreaOutput" editable="false" prefHeight="326.0" prefWidth="508.0" />
             <HBox layoutX="4.0" layoutY="643.0" prefHeight="46.0" prefWidth="508.0" spacing="10.0">
                <children>
                   <TextField fx:id="playerInput" onAction="#onEnterButtonClick" prefHeight="26.0" prefWidth="445.0" HBox.hgrow="ALWAYS" />
@@ -38,10 +39,11 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding>
             </HBox>
-            <AnchorPane layoutY="337.0" prefHeight="295.0" prefWidth="483.0">
+            <AnchorPane layoutY="328.0" prefHeight="305.0" prefWidth="508.0">
                <children>
                   <ImageView fx:id="npcImage" fitHeight="145.0" fitWidth="222.0" pickOnBounds="true" preserveRatio="true" />
-                  <TextArea fx:id="npcDialogue" layoutX="-7.0" layoutY="143.0" prefHeight="152.0" prefWidth="514.0" />
+                  <TextArea fx:id="npcDialogue" layoutX="-1.0" layoutY="164.0" prefHeight="139.0" prefWidth="508.0" />
+                  <Label alignment="CENTER" layoutY="143.0" prefHeight="18.0" prefWidth="94.0" text="NpcName" />
                </children>
             </AnchorPane>
          </children>
@@ -60,7 +62,7 @@
                                     <Image url="@HerniPlan/DanterraMap1.jpg" />
                                  </image>
                               </ImageView>
-                              <ImageView fitHeight="34.0" fitWidth="42.0" layoutX="125.0" layoutY="145.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fx:id="player" fitHeight="34.0" fitWidth="42.0" layoutX="125.0" layoutY="57.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@Player/Player2.jpg" />
                                  </image>
@@ -71,6 +73,7 @@
                   </HBox>
                </content>
             </TitledPane>
+            <Label layoutX="3.0" layoutY="356.0" prefHeight="18.0" prefWidth="123.0" text="Východy:" />
          </children>
       </AnchorPane>
    </children>
