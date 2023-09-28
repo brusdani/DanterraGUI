@@ -1,6 +1,10 @@
 package cz.vse.danterragui.logika;
 
-import java.util.Scanner;
+import cz.vse.danterragui.main.Pozorovatel;
+import cz.vse.danterragui.main.PredmetPozorovani;
+import cz.vse.danterragui.main.ZmenaHry;
+
+import java.util.*;
 
 /**
  *  Třída Hra - třída představující logiku adventury.
@@ -18,6 +22,8 @@ public class Hra implements IHra {
     private SeznamPrikazu platnePrikazy;    // obsahuje seznam přípustných příkazů
     private HerniPlan herniPlan;
     private Inventory inventory;
+
+    private Map<ZmenaHry, Set<Pozorovatel>> seznamPozorovatelu = new HashMap<>();
     private boolean konecHry = false;
     private String username = "adventurer"; //getUsername();
     private  Aiba aiba;
@@ -52,6 +58,9 @@ public class Hra implements IHra {
         platnePrikazy.vlozPrikaz(new PrikazSail(inventory,herniPlan));
         platnePrikazy.vlozPrikaz(new PrikazFireIV(inventory,herniPlan));
         platnePrikazy.vlozPrikaz(new PrikazShowInventory(inventory));
+        for(ZmenaHry zmenaHry: ZmenaHry.values()){
+            seznamPozorovatelu.put(zmenaHry, new HashSet<>());
+        }
     }
 
     /**
@@ -167,6 +176,7 @@ public class Hra implements IHra {
      */
     void setKonecHry(boolean konecHry) {
         this.konecHry = konecHry;
+        upozorniPozorovatele(ZmenaHry.KONEC_HRY);
     }
 
     /**
@@ -185,6 +195,16 @@ public class Hra implements IHra {
      */
     public Aiba getAiba() {
         return aiba;
+    }
+
+    @Override
+    public void registruj(ZmenaHry zmenaHry, Pozorovatel pozorovatel) {
+        seznamPozorovatelu.get(zmenaHry).add(pozorovatel);
+    }
+    private void upozorniPozorovatele(ZmenaHry zmenaHry){
+        for (Pozorovatel pozorovatel : seznamPozorovatelu.get(zmenaHry)) {
+            pozorovatel.aktualizuj();
+        }
     }
 }
 

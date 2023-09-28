@@ -2,6 +2,7 @@ package cz.vse.danterragui.logika;
 
 import cz.vse.danterragui.main.Pozorovatel;
 import cz.vse.danterragui.main.PredmetPozorovani;
+import cz.vse.danterragui.main.ZmenaHry;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -29,7 +30,7 @@ import java.util.stream.Collectors;
  * @author Daniel Brus
  */
 public class Prostor implements PredmetPozorovani {
-    private Set<Pozorovatel> seznamPozorovatelu = new HashSet<>();
+    private Map<ZmenaHry, Set<Pozorovatel>> seznamPozorovatelu = new HashMap<>();
 
     private String nazev;
     private String aibaDescription;
@@ -57,6 +58,9 @@ public class Prostor implements PredmetPozorovani {
         vychody = new HashSet<>();
         things = new HashMap<>();
         npcs = new HashMap<>();
+        for(ZmenaHry zmenaHry : ZmenaHry.values()){
+            seznamPozorovatelu.put(zmenaHry, new HashSet<>());
+        }
     }
 
     /**
@@ -66,7 +70,7 @@ public class Prostor implements PredmetPozorovani {
 
     public void setLock(boolean locked) {
         this.locked = locked;
-        notifyObserver();
+        notifyObserver(ZmenaHry.STAV_HRY);
     }
 
     /**
@@ -136,12 +140,12 @@ public class Prostor implements PredmetPozorovani {
     public void setWasScanned(boolean wasScanned) {
         //System.out.printf("Was scanned was called");
         this.wasScanned = wasScanned;
-        notifyObserver();
+        notifyObserver(ZmenaHry.STAV_HRY);
     }
 
-    private void notifyObserver() {
+    private void notifyObserver(ZmenaHry zmenaHry) {
         System.out.println("Observer notified");
-        for(Pozorovatel pozorovatel : seznamPozorovatelu) {
+        for(Pozorovatel pozorovatel : seznamPozorovatelu.get(zmenaHry)) {
             pozorovatel.aktualizuj();
         }
     }
@@ -416,7 +420,7 @@ public class Prostor implements PredmetPozorovani {
     }
 
     @Override
-    public void registruj(Pozorovatel pozorovatel) {
-        seznamPozorovatelu.add(pozorovatel);
+    public void registruj(ZmenaHry zmenaHry, Pozorovatel pozorovatel) {
+        seznamPozorovatelu.get(zmenaHry).add(pozorovatel);
     }
 }

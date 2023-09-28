@@ -2,6 +2,7 @@ package cz.vse.danterragui.logika;
 
 import cz.vse.danterragui.main.Pozorovatel;
 import cz.vse.danterragui.main.PredmetPozorovani;
+import cz.vse.danterragui.main.ZmenaHry;
 
 import java.util.*;
 
@@ -20,7 +21,7 @@ public class HerniPlan implements PredmetPozorovani {
 
     private Prostor aktualniProstor;
 
-    private Set<Pozorovatel> seznamPozorovatelu = new HashSet<>();
+    private Map<ZmenaHry, Set<Pozorovatel>> seznamPozorovatelu = new HashMap<>();
     private Prostor teleport;
     private Prostor winRoom;
     private Thing chakram;
@@ -39,7 +40,9 @@ public class HerniPlan implements PredmetPozorovani {
      */
     public HerniPlan() {
         zalozProstoryHry();
-
+        for(ZmenaHry zmenaHry : ZmenaHry.values()){
+            seznamPozorovatelu.put(zmenaHry, new HashSet<>());
+        }
     }
     /**
      *  Vytváří jednotlivé prostory a propojuje je pomocí východů.
@@ -167,6 +170,7 @@ public class HerniPlan implements PredmetPozorovani {
         cliffs.addNpc(ravi);
         monaxia.addNpc(kira);
         babel.addNpc(keeper);
+        cellar.addNpc(keeper);
 
         // přiřazují se průchody mezi prostory (sousedící prostory)
         startingRoom.setVychod(lockedRoom);
@@ -249,11 +253,11 @@ public class HerniPlan implements PredmetPozorovani {
      */
     public void setAktualniProstor(Prostor prostor) {
         aktualniProstor = prostor;
-        notifyObserver();
+        notifyObserver(ZmenaHry.ZMENA_MISTNOSTI);
     }
 
-    private void notifyObserver() {
-        for(Pozorovatel pozorovatel : seznamPozorovatelu) {
+    private void notifyObserver(ZmenaHry zmenaHry) {
+        for(Pozorovatel pozorovatel : seznamPozorovatelu.get(zmenaHry)) {
             pozorovatel.aktualizuj();
         }
     }
@@ -299,7 +303,7 @@ public class HerniPlan implements PredmetPozorovani {
     }
 
     @Override
-    public void registruj(Pozorovatel pozorovatel) {
-        seznamPozorovatelu.add(pozorovatel);
+    public void registruj(ZmenaHry zmenaHry, Pozorovatel pozorovatel) {
+        seznamPozorovatelu.get(zmenaHry).add(pozorovatel);
     }
 }

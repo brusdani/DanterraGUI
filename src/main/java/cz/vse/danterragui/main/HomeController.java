@@ -1,20 +1,19 @@
 package cz.vse.danterragui.main;
 
-import cz.vse.danterragui.logika.Hra;
-import cz.vse.danterragui.logika.IHra;
-import cz.vse.danterragui.logika.PrikazJdi;
-import cz.vse.danterragui.logika.Prostor;
+import cz.vse.danterragui.logika.*;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
 import java.util.Optional;
 
-public class HomeController implements Pozorovatel {
+public class HomeController{
     @FXML
     private TextField playerInput;
     @FXML
@@ -23,10 +22,16 @@ public class HomeController implements Pozorovatel {
     private TextArea textAreaOutput;
     @FXML
     private ListView<Prostor> exitPanel;
+    @FXML
+    private TextArea npcDialogue;
+    @FXML
+    private ImageView npcImage;
 
     private IHra hra = new Hra();
 
     private ObservableList<Prostor> exitList = FXCollections.observableArrayList();
+    private Image aibaImage = new Image("file:///C:/Users/Daniel/Pictures/Danterra_Pictures/Aiba.jpg");
+    private Image ghostImage = new Image("file:///C:/Users/Daniel/Pictures/Danterra_Pictures/Ghost.jpg");
 
     @FXML
     private void initialize(){
@@ -35,7 +40,8 @@ public class HomeController implements Pozorovatel {
         textAreaOutput.appendText(hra.intro()+"\n");
         Platform.runLater(() -> playerInput.requestFocus());
         exitPanel.setItems(exitList);
-        hra.getHerniPlan().registruj(this);
+        hra.getHerniPlan().registruj(ZmenaHry.ZMENA_MISTNOSTI,() -> aktualizuj());
+        //hra.registruj(ZmenaHry.KONEC_HRY, () -> updateGameEnding());
     }
     @FXML
     private void updateExitList(){
@@ -47,18 +53,42 @@ public class HomeController implements Pozorovatel {
     private void onEnterButtonClick(ActionEvent event){
         String command = playerInput.getText();
         playerInput.clear();
-        hra.getHerniPlan().getAktualniProstor().registruj(this);
-        exitPanel.refresh();
-
         processCommand(command);
+        hra.getHerniPlan().getAktualniProstor().registruj(ZmenaHry.STAV_HRY,() -> aktualizuj());
+        exitPanel.refresh();
     }
 
     private void processCommand(String command) {
         textAreaOutput.appendText(">"+ command + "\n");
         String result = hra.zpracujPrikaz(command);
-        textAreaOutput.appendText(result+"\n");
+        //textAreaOutput.appendText(result+"\n");
+        npcDialogue.clear();
+        npcDialogue.appendText(result);
+        if(hra.getAiba().isSummoned()) {
+            npcImage.setImage(aibaImage);
+        }
+        handleNpcDialogue(command,result,npcImage);
 
+        updateGameEnding();
+    }
+
+    private void handleNpcDialogue(String command, String result, ImageView imageView){
+        if (command.startsWith("talkTo")) {
+            String npcName = command.substring("talkTo ".length());
+            Npc npc = hra.getHerniPlan().getRavi();
+
+            if (npc != null && !result.equals("Nikdo takový tu není")) {
+                imageView.setImage(ghostImage);
+                //imageView.setImage(null);
+                //imageView.setImage(npc.getImage());
+                //npcLabel.setText(npcName);
+            }
+        }
+    }
+
+    private void updateGameEnding() {
         if(hra.konecHry()){
+            textAreaOutput.appendText(hra.ending());
             textAreaOutput.appendText(hra.vratEpilog());
             playerInput.setDisable(true);
             enterButton.setDisable(true);
@@ -76,7 +106,6 @@ public class HomeController implements Pozorovatel {
     }
 
 
-    @Override
     public void aktualizuj() {
         //System.out.printf("Aktualizuji");
         if (hra.getHerniPlan().getAktualniProstor().isWasScanned()){

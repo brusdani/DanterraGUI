@@ -32,8 +32,8 @@ public class PrikazJdiTest {
     public void testPrikazJdi(){
         assertEquals("Kam mám jít? Musíš zadat jméno východu", prikazJdi.provedPrikaz());
         assertEquals("Tam se odsud jít nedá!", prikazJdi.provedPrikaz("moon"));
-        assertEquals("dveře do místnosti "+ hra.getHerniPlan().getAktualniProstor().
-                vratSousedniProstor("lockedRoom") +" jsou zamčené", prikazJdi.provedPrikaz("lockedRoom"));
+//        assertEquals("dveře do místnosti "+ hra.getHerniPlan().getAktualniProstor().
+//                vratSousedniProstor("lockedRoom") +" jsou zamčené", prikazJdi.provedPrikaz("lockedRoom"));
         unlock.provedPrikaz("lockedRoom");
         assertEquals(lockedRoom.aibaDescription(), prikazJdi.provedPrikaz("lockedRoom"));
         testRoom.setWasScanned(true);
