@@ -54,17 +54,17 @@ public class HomeController{
         });
         //hra.registruj(ZmenaHry.KONEC_HRY, () -> updateGameEnding());
         setRoomCoordinates();
-        exitPanel.setCellFactory(new Callback<ListView<Prostor>, ListCell<Prostor>>() {
-            @Override
-            public ListCell<Prostor> call(ListView<Prostor> prostorListView) {
-                return new ListCell<>() {
-                    @Override
-                    protected void updateItem(Prostor item, boolean empty) {
-                            super.updateItem(item,empty);
-                    }
-                };
-            }
-        });
+//        exitPanel.setCellFactory(new Callback<ListView<Prostor>, ListCell<Prostor>>() {
+//            @Override
+//            public ListCell<Prostor> call(ListView<Prostor> prostorListView) {
+//                return new ListCell<>() {
+//                    @Override
+//                    protected void updateItem(Prostor item, boolean empty) {
+//                            super.updateItem(item,empty);
+//                    }
+//                };
+//            }
+//        });
 
     }
 
