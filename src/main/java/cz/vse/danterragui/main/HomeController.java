@@ -38,7 +38,9 @@ public class HomeController{
     private ObservableList<Prostor> exitList = FXCollections.observableArrayList();
 
     private Map<String, Point2D> roomCoordinates = new HashMap<>();
+
     private Image aibaImage = new Image("file:///C:/Users/Daniel/Pictures/Danterra_Pictures/Aiba.jpg");
+    //private Image aibaImage = new Image(getClass().getResource("Prostory/cellar.jpg").toExternalForm());
     private Image ghostImage = new Image("file:///C:/Users/Daniel/Pictures/Danterra_Pictures/Ghost.jpg");
 
     @FXML
@@ -54,17 +56,7 @@ public class HomeController{
         });
         //hra.registruj(ZmenaHry.KONEC_HRY, () -> updateGameEnding());
         setRoomCoordinates();
-//        exitPanel.setCellFactory(new Callback<ListView<Prostor>, ListCell<Prostor>>() {
-//            @Override
-//            public ListCell<Prostor> call(ListView<Prostor> prostorListView) {
-//                return new ListCell<>() {
-//                    @Override
-//                    protected void updateItem(Prostor item, boolean empty) {
-//                            super.updateItem(item,empty);
-//                    }
-//                };
-//            }
-//        });
+        exitPanel.setCellFactory(param -> new ListCellProstor());
 
     }
 
@@ -79,7 +71,6 @@ public class HomeController{
         roomCoordinates.put("village", new Point2D(230,58));
         roomCoordinates.put("pub", new Point2D(300,56));
     }
-
     @FXML
     private void updateExitList(){
         exitList.clear();
