@@ -50,6 +50,7 @@ public class HomeController{
         textAreaOutput.appendText(hra.intro()+"\n");
         Platform.runLater(() -> playerInput.requestFocus());
         exitPanel.setItems(exitList);
+        setPlayerStartingLocation();
         hra.getHerniPlan().registruj(ZmenaHry.ZMENA_MISTNOSTI,() -> {
             aktualizuj();
             updatePlayerLocation();
@@ -70,6 +71,10 @@ public class HomeController{
         roomCoordinates.put("cliffs", new Point2D(144,224));
         roomCoordinates.put("village", new Point2D(230,58));
         roomCoordinates.put("pub", new Point2D(300,56));
+    }
+    private void setPlayerStartingLocation(){
+        player.setLayoutX(127);
+        player.setLayoutY(59);
     }
     @FXML
     private void updateExitList(){
@@ -137,6 +142,22 @@ public class HomeController{
         if (result.isPresent() && result.get() == ButtonType.OK) {
             Platform.exit();
         }
+    }
+    @FXML
+    public void newGame(ActionEvent event){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION,"Are you sure you want to restart the game?");
+        Optional <ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            clearEverything();
+            hra = new Hra();
+            initialize();
+        }
+    }
+    public void clearEverything(){
+        textAreaOutput.clear();
+        npcDialogue.clear();
+        npcImage.setImage(null);
+        exitList.clear();
     }
 
 
