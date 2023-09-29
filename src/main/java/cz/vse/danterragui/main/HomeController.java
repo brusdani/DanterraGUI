@@ -7,10 +7,13 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.web.WebView;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 
 import java.util.HashMap;
@@ -158,6 +161,15 @@ public class HomeController{
         npcDialogue.clear();
         npcImage.setImage(null);
         exitList.clear();
+    }
+    @FXML
+    private void helpClick(ActionEvent event){
+        Stage helpStage = new Stage();
+        WebView webView = new WebView();
+        Scene helpScene = new Scene(webView);
+        webView.getEngine().load(getClass().getResource("help.html").toExternalForm());
+        helpStage.setScene(helpScene);
+        helpStage.show();
     }
 
 
