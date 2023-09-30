@@ -7,10 +7,13 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.web.WebView;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 
 import java.util.HashMap;
@@ -38,7 +41,9 @@ public class HomeController{
     private ObservableList<Prostor> exitList = FXCollections.observableArrayList();
 
     private Map<String, Point2D> roomCoordinates = new HashMap<>();
+
     private Image aibaImage = new Image("file:///C:/Users/Daniel/Pictures/Danterra_Pictures/Aiba.jpg");
+    //private Image aibaImage = new Image(getClass().getResource("Prostory/cellar.jpg").toExternalForm());
     private Image ghostImage = new Image("file:///C:/Users/Daniel/Pictures/Danterra_Pictures/Ghost.jpg");
 
     @FXML
@@ -48,23 +53,14 @@ public class HomeController{
         textAreaOutput.appendText(hra.intro()+"\n");
         Platform.runLater(() -> playerInput.requestFocus());
         exitPanel.setItems(exitList);
+        setPlayerStartingLocation();
         hra.getHerniPlan().registruj(ZmenaHry.ZMENA_MISTNOSTI,() -> {
             aktualizuj();
             updatePlayerLocation();
         });
         //hra.registruj(ZmenaHry.KONEC_HRY, () -> updateGameEnding());
         setRoomCoordinates();
-//        exitPanel.setCellFactory(new Callback<ListView<Prostor>, ListCell<Prostor>>() {
-//            @Override
-//            public ListCell<Prostor> call(ListView<Prostor> prostorListView) {
-//                return new ListCell<>() {
-//                    @Override
-//                    protected void updateItem(Prostor item, boolean empty) {
-//                            super.updateItem(item,empty);
-//                    }
-//                };
-//            }
-//        });
+        exitPanel.setCellFactory(param -> new ListCellProstor());
 
     }
 
@@ -79,7 +75,10 @@ public class HomeController{
         roomCoordinates.put("village", new Point2D(230,58));
         roomCoordinates.put("pub", new Point2D(300,56));
     }
-
+    private void setPlayerStartingLocation(){
+        player.setLayoutX(127);
+        player.setLayoutY(59);
+    }
     @FXML
     private void updateExitList(){
         exitList.clear();
@@ -146,6 +145,31 @@ public class HomeController{
         if (result.isPresent() && result.get() == ButtonType.OK) {
             Platform.exit();
         }
+    }
+    @FXML
+    public void newGame(ActionEvent event){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION,"Are you sure you want to restart the game?");
+        Optional <ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            clearEverything();
+            hra = new Hra();
+            initialize();
+        }
+    }
+    public void clearEverything(){
+        textAreaOutput.clear();
+        npcDialogue.clear();
+        npcImage.setImage(null);
+        exitList.clear();
+    }
+    @FXML
+    private void helpClick(ActionEvent event){
+        Stage helpStage = new Stage();
+        WebView webView = new WebView();
+        Scene helpScene = new Scene(webView);
+        webView.getEngine().load(getClass().getResource("help.html").toExternalForm());
+        helpStage.setScene(helpScene);
+        helpStage.show();
     }
 
 

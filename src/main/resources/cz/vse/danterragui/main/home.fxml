@@ -22,7 +22,8 @@
           <Menu mnemonicParsing="false" text="Game">
             <items>
               <MenuItem mnemonicParsing="false" onAction="#terminateGame" text="Quit" />
-                <MenuItem onAction="#updateExitList" text="Aktualizuj" />
+                  <MenuItem mnemonicParsing="false" onAction="#newGame" text="NewGame" />
+                <MenuItem onAction="#helpClick" text="Help" />
             </items>
           </Menu>
         </menus>
