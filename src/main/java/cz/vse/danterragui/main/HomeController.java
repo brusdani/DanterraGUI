@@ -43,6 +43,8 @@ public class HomeController{
     private ObservableList<Prostor> exitList = FXCollections.observableArrayList();
     private ObservableList<Thing> inventory = FXCollections.observableArrayList();
 
+    private NpcImageView npcImageView = new NpcImageView();
+
     private Map<String, Point2D> roomCoordinates = new HashMap<>();
 
     private Image aibaImage = new Image("file:///C:/Users/Daniel/Pictures/Danterra_Pictures/Aiba.jpg");
@@ -129,13 +131,12 @@ public class HomeController{
     private void handleNpcDialogue(String command, String result, ImageView imageView){
         if (command.startsWith("talkTo")) {
             String npcName = command.substring("talkTo ".length());
-            Npc npc = hra.getHerniPlan().getRavi();
+            Image npcImage = npcImageView.getImage(npcName);
 
-            if (npc != null && !result.equals("Nikdo takový tu není")) {
-                imageView.setImage(ghostImage);
-                //imageView.setImage(null);
-                //imageView.setImage(npc.getImage());
-                //npcLabel.setText(npcName);
+            if (npcImage != null && !result.equals("Nikdo takový tu není")) {
+                imageView.setImage(npcImage);
+            } else {
+                imageView.setImage(aibaImage);
             }
         }
     }
@@ -172,6 +173,7 @@ public class HomeController{
         textAreaOutput.clear();
         npcDialogue.clear();
         npcImage.setImage(null);
+        inventory.clear();
         exitList.clear();
     }
     @FXML
