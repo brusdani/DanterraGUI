@@ -37,11 +37,17 @@ public class HomeController{
     private ImageView player;
     @FXML
     private ListView<Thing> inventoryPanel;
+    @FXML
+    private Label npcLabel;
+    @FXML
+    private ListView<Thing> roomPanel;
 
     private IHra hra = new Hra();
 
     private ObservableList<Prostor> exitList = FXCollections.observableArrayList();
     private ObservableList<Thing> inventory = FXCollections.observableArrayList();
+
+    private ObservableList<Thing> roomContents = FXCollections.observableArrayList();
 
     private NpcImageView npcImageView = new NpcImageView();
 
@@ -59,6 +65,7 @@ public class HomeController{
         Platform.runLater(() -> playerInput.requestFocus());
         exitPanel.setItems(exitList);
         inventoryPanel.setItems(inventory);
+        roomPanel.setItems(roomContents);
         setPlayerStartingLocation();
         hra.getHerniPlan().registruj(ZmenaHry.ZMENA_MISTNOSTI,() -> {
             aktualizuj();
@@ -68,6 +75,7 @@ public class HomeController{
         setRoomCoordinates();
         exitPanel.setCellFactory(param -> new ListCellProstor());
         inventoryPanel.setCellFactory(param -> new ListCellThing());
+        roomPanel.setCellFactory(param -> new ListCellThing());
 
     }
 
@@ -96,6 +104,11 @@ public class HomeController{
         inventory.clear();
         inventory.addAll(hra.getInventory().getItemsList());
     }
+    @FXML
+    private void updateRoomContents(){
+        roomContents.clear();
+        roomContents.addAll(hra.getHerniPlan().getAktualniProstor().getThings());
+    }
 
     private void updatePlayerLocation(){
         String prostor = hra.getHerniPlan().getAktualniProstor().getNazev();
@@ -109,9 +122,15 @@ public class HomeController{
         playerInput.clear();
         processCommand(command);
         updateInventory();
+        if (hra.getHerniPlan().getAktualniProstor().isWasScanned()){
+            updateRoomContents();
+        } else {
+            roomContents.clear();
+        }
         hra.getHerniPlan().getAktualniProstor().registruj(ZmenaHry.STAV_HRY,() -> aktualizuj());
         exitPanel.refresh();
         inventoryPanel.refresh();
+        roomPanel.refresh();
     }
 
     private void processCommand(String command) {
@@ -122,6 +141,7 @@ public class HomeController{
         npcDialogue.appendText(result);
         if(hra.getAiba().isSummoned()) {
             npcImage.setImage(aibaImage);
+            npcLabel.setText("Aiba");
         }
         handleNpcDialogue(command,result,npcImage);
 
@@ -135,8 +155,13 @@ public class HomeController{
 
             if (npcImage != null && !result.equals("Nikdo takový tu není")) {
                 imageView.setImage(npcImage);
-            } else {
+                npcLabel.setText(npcName);
+            } else if (hra.getAiba().isSummoned()) {
                 imageView.setImage(aibaImage);
+                npcLabel.setText("Aiba");
+            } else {
+                imageView.setImage(null);
+                npcLabel.setText("");
             }
         }
     }
@@ -188,12 +213,11 @@ public class HomeController{
 
 
     public void aktualizuj() {
-        //System.out.printf("Aktualizuji");
         if (hra.getHerniPlan().getAktualniProstor().isWasScanned()){
             updateExitList();
-        } else
+        } else {
             exitList.clear();
-
+        }
     }
     @FXML
     private void clickExitPanel(MouseEvent mouseEvent){

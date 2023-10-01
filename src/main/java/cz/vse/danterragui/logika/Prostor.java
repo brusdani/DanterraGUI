@@ -419,6 +419,12 @@ public class Prostor implements PredmetPozorovani {
         return Collections.unmodifiableCollection(vychody);
     }
 
+    public List<Thing> getThings() {
+        List<Thing> itemList = new ArrayList<>();
+        itemList.addAll(things.values());
+        return itemList;
+    }
+
     @Override
     public void registruj(ZmenaHry zmenaHry, Pozorovatel pozorovatel) {
         seznamPozorovatelu.get(zmenaHry).add(pozorovatel);
