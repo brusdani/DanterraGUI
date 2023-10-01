@@ -35,10 +35,15 @@ public class HomeController{
     private ImageView npcImage;
     @FXML
     private ImageView player;
+    @FXML
+    private ListView<Thing> inventoryPanel;
 
     private IHra hra = new Hra();
 
     private ObservableList<Prostor> exitList = FXCollections.observableArrayList();
+    private ObservableList<Thing> inventory = FXCollections.observableArrayList();
+
+    private NpcImageView npcImageView = new NpcImageView();
 
     private Map<String, Point2D> roomCoordinates = new HashMap<>();
 
@@ -53,6 +58,7 @@ public class HomeController{
         textAreaOutput.appendText(hra.intro()+"\n");
         Platform.runLater(() -> playerInput.requestFocus());
         exitPanel.setItems(exitList);
+        inventoryPanel.setItems(inventory);
         setPlayerStartingLocation();
         hra.getHerniPlan().registruj(ZmenaHry.ZMENA_MISTNOSTI,() -> {
             aktualizuj();
@@ -61,6 +67,7 @@ public class HomeController{
         //hra.registruj(ZmenaHry.KONEC_HRY, () -> updateGameEnding());
         setRoomCoordinates();
         exitPanel.setCellFactory(param -> new ListCellProstor());
+        inventoryPanel.setCellFactory(param -> new ListCellThing());
 
     }
 
@@ -84,6 +91,11 @@ public class HomeController{
         exitList.clear();
         exitList.addAll(hra.getHerniPlan().getAktualniProstor().getVychody());
     }
+    @FXML
+    private void updateInventory() {
+        inventory.clear();
+        inventory.addAll(hra.getInventory().getItemsList());
+    }
 
     private void updatePlayerLocation(){
         String prostor = hra.getHerniPlan().getAktualniProstor().getNazev();
@@ -96,8 +108,10 @@ public class HomeController{
         String command = playerInput.getText();
         playerInput.clear();
         processCommand(command);
+        updateInventory();
         hra.getHerniPlan().getAktualniProstor().registruj(ZmenaHry.STAV_HRY,() -> aktualizuj());
         exitPanel.refresh();
+        inventoryPanel.refresh();
     }
 
     private void processCommand(String command) {
@@ -117,13 +131,12 @@ public class HomeController{
     private void handleNpcDialogue(String command, String result, ImageView imageView){
         if (command.startsWith("talkTo")) {
             String npcName = command.substring("talkTo ".length());
-            Npc npc = hra.getHerniPlan().getRavi();
+            Image npcImage = npcImageView.getImage(npcName);
 
-            if (npc != null && !result.equals("Nikdo takový tu není")) {
-                imageView.setImage(ghostImage);
-                //imageView.setImage(null);
-                //imageView.setImage(npc.getImage());
-                //npcLabel.setText(npcName);
+            if (npcImage != null && !result.equals("Nikdo takový tu není")) {
+                imageView.setImage(npcImage);
+            } else {
+                imageView.setImage(aibaImage);
             }
         }
     }
@@ -160,6 +173,7 @@ public class HomeController{
         textAreaOutput.clear();
         npcDialogue.clear();
         npcImage.setImage(null);
+        inventory.clear();
         exitList.clear();
     }
     @FXML

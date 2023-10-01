@@ -197,6 +197,10 @@ public class Hra implements IHra {
         return aiba;
     }
 
+    public Inventory getInventory() {
+        return inventory;
+    }
+
     @Override
     public void registruj(ZmenaHry zmenaHry, Pozorovatel pozorovatel) {
         seznamPozorovatelu.get(zmenaHry).add(pozorovatel);
@@ -206,6 +210,7 @@ public class Hra implements IHra {
             pozorovatel.aktualizuj();
         }
     }
+
 }
 
 

@@ -2,6 +2,7 @@ package cz.vse.danterragui.logika;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 /**
  * Class Inventory - Represents player's inventory
@@ -63,6 +64,13 @@ public class Inventory {
      */
     public Set displayItems(){
         return items.keySet();
+    }
+
+
+    public List<Thing> getItemsList() {
+        List<Thing> itemList = new ArrayList<>();
+        itemList.addAll(items.values());
+        return itemList;
     }
 
     /**
