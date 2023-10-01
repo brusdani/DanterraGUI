@@ -9,7 +9,7 @@ package cz.vse.danterragui.logika;
 
 
 public class PrikazDrop implements  IPrikaz{
-    private static final String NAZEV = "drop";
+    public static final String NAZEV = "drop";
 
     //public Inventory inventory = new Inventory();
     private final HerniPlan herniPlan;

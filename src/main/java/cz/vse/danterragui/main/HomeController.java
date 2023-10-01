@@ -13,6 +13,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.web.WebView;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
@@ -200,6 +201,8 @@ public class HomeController{
         npcImage.setImage(null);
         inventory.clear();
         exitList.clear();
+        roomContents.clear();
+        npcLabel.setText("");
     }
     @FXML
     private void helpClick(ActionEvent event){
@@ -225,8 +228,14 @@ public class HomeController{
         if (destination == null) return;
         String command = PrikazJdi.NAZEV + " " + destination;
         processCommand(command);
+        if (hra.getHerniPlan().getAktualniProstor().isWasScanned()){
+            updateRoomContents();
+        } else {
+            roomContents.clear();
+        }
         hra.getHerniPlan().getAktualniProstor().registruj(ZmenaHry.STAV_HRY,() -> aktualizuj());
         exitPanel.refresh();
+        roomPanel.refresh();
 
     }
     @FXML
@@ -240,5 +249,37 @@ public class HomeController{
         inventoryPanel.refresh();
         roomPanel.refresh();
     }
+    @FXML
+    private void showUseOrDropPopup(MouseEvent mouseEvent) {
+        Thing targetItem = inventoryPanel.getSelectionModel().getSelectedItem();
+        if (targetItem == null) return;
 
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.setTitle("Use or Drop Item");
+        alert.setHeaderText("What would you like to do with the item?");
+        alert.setContentText("Choose an option:");
+
+        ButtonType useButton = new ButtonType("Use");
+        ButtonType dropButton = new ButtonType("Drop");
+        ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+        alert.getButtonTypes().setAll(useButton, dropButton, cancelButton);
+
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.isPresent()) {
+            if (result.get() == useButton) {
+                String command = PrikazUse.NAZEV + " " + targetItem;
+                processCommand(command);
+            } else if (result.get() == dropButton) {
+                String command = PrikazDrop.NAZEV + " " + targetItem;
+                processCommand(command);
+            }
+            updateInventory();
+            updateRoomContents();
+            inventoryPanel.refresh();
+            roomPanel.refresh();
+        }
+    }
 }

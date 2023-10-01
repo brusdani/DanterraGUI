@@ -9,7 +9,7 @@ package cz.vse.danterragui.logika;
 
 public class PrikazUse implements  IPrikaz{
 
-    private static final String NAZEV = "use";
+    public static final String NAZEV = "use";
 
     private Inventory inventory;
 
