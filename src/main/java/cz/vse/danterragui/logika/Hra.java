@@ -206,6 +206,10 @@ public class Hra implements IHra {
             pozorovatel.aktualizuj();
         }
     }
+
+    public Inventory getInventory() {
+        return inventory;
+    }
 }
 
 

@@ -35,10 +35,13 @@ public class HomeController{
     private ImageView npcImage;
     @FXML
     private ImageView player;
+    @FXML
+    private ListView<Thing> inventoryPanel;
 
     private IHra hra = new Hra();
 
     private ObservableList<Prostor> exitList = FXCollections.observableArrayList();
+    private ObservableList<Thing> inventory = FXCollections.observableArrayList();
 
     private Map<String, Point2D> roomCoordinates = new HashMap<>();
 
@@ -53,6 +56,7 @@ public class HomeController{
         textAreaOutput.appendText(hra.intro()+"\n");
         Platform.runLater(() -> playerInput.requestFocus());
         exitPanel.setItems(exitList);
+        inventoryPanel.setItems(inventory);
         setPlayerStartingLocation();
         hra.getHerniPlan().registruj(ZmenaHry.ZMENA_MISTNOSTI,() -> {
             aktualizuj();
@@ -61,6 +65,7 @@ public class HomeController{
         //hra.registruj(ZmenaHry.KONEC_HRY, () -> updateGameEnding());
         setRoomCoordinates();
         exitPanel.setCellFactory(param -> new ListCellProstor());
+        inventoryPanel.setCellFactory(param -> new ListCellThing());
 
     }
 
@@ -84,6 +89,10 @@ public class HomeController{
         exitList.clear();
         exitList.addAll(hra.getHerniPlan().getAktualniProstor().getVychody());
     }
+//    @FXML
+//    private void updateInventory() {
+//        inventory.clear();
+//    }
 
     private void updatePlayerLocation(){
         String prostor = hra.getHerniPlan().getAktualniProstor().getNazev();
