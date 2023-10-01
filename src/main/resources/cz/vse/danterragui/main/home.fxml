@@ -89,7 +89,7 @@
         <tabs>
           <Tab text="Things">
                <content>
-                  <ListView fx:id="roomPanel" prefHeight="200.0" prefWidth="200.0" />
+                  <ListView fx:id="roomPanel" onMouseClicked="#clickRoomContents" prefHeight="200.0" prefWidth="200.0" />
                </content>
             </Tab>
           <Tab text="Untitled Tab 2" />

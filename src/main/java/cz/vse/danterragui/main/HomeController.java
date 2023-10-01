@@ -229,5 +229,16 @@ public class HomeController{
         exitPanel.refresh();
 
     }
+    @FXML
+    private void clickRoomContents(MouseEvent mouseEvent){
+        Thing targetItem = roomPanel.getSelectionModel().getSelectedItem();
+        if (targetItem == null) return;
+        String command = PrikazPickup.NAZEV + " " + targetItem;
+        processCommand(command);
+        updateInventory();
+        updateRoomContents();
+        inventoryPanel.refresh();
+        roomPanel.refresh();
+    }
 
 }
