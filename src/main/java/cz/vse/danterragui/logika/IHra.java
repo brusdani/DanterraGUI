@@ -64,6 +64,8 @@ public interface IHra extends PredmetPozorovani
 
      public Aiba getAiba();
 
+     public Inventory getInventory();
+
     
     //== ZDĚDĚNÉ METODY ========================================================
     //== INTERNÍ DATOVÉ TYPY ===================================================

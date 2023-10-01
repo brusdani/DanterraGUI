@@ -89,10 +89,11 @@ public class HomeController{
         exitList.clear();
         exitList.addAll(hra.getHerniPlan().getAktualniProstor().getVychody());
     }
-//    @FXML
-//    private void updateInventory() {
-//        inventory.clear();
-//    }
+    @FXML
+    private void updateInventory() {
+        inventory.clear();
+        inventory.addAll(hra.getInventory().getItemsList());
+    }
 
     private void updatePlayerLocation(){
         String prostor = hra.getHerniPlan().getAktualniProstor().getNazev();
@@ -105,8 +106,10 @@ public class HomeController{
         String command = playerInput.getText();
         playerInput.clear();
         processCommand(command);
+        updateInventory();
         hra.getHerniPlan().getAktualniProstor().registruj(ZmenaHry.STAV_HRY,() -> aktualizuj());
         exitPanel.refresh();
+        inventoryPanel.refresh();
     }
 
     private void processCommand(String command) {
