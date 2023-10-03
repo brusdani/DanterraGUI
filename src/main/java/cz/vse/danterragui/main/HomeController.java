@@ -50,6 +50,8 @@ public class HomeController{
     private TextField answerInput;
     @FXML
     private ListView<Npc> npcPanel;
+    @FXML
+    private Button aibaButton;
 
     private IHra hra = new Hra();
 
@@ -177,6 +179,21 @@ public class HomeController{
                 updateRiddle();
                 inventoryPanel.refresh();
             }
+        }
+    }
+    @FXML
+    private void onAibaButtonClick(ActionEvent event){
+        if (!hra.getAiba().isSummoned()) {
+            String command = PrikazCallAiba.NAZEV;
+            processCommand(command);
+            aibaButton.setText("aibaScan");
+        } else {
+            String command = PrikazAibaScan.NAZEV;
+            processCommand(command);
+            updateRoomContents();
+            updateRiddle();
+            updateNpcList();
+            aktualizuj();
         }
     }
 
