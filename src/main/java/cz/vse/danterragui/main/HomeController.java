@@ -58,6 +58,8 @@ public class HomeController{
 
     private ObservableList<Thing> roomContents = FXCollections.observableArrayList();
 
+    private ObservableList<Npc> roomNpcs = FXCollections.observableArrayList();
+
     private NpcImageView npcImageView = new NpcImageView();
 
     private Map<String, Point2D> roomCoordinates = new HashMap<>();
@@ -75,6 +77,7 @@ public class HomeController{
         exitPanel.setItems(exitList);
         inventoryPanel.setItems(inventory);
         roomPanel.setItems(roomContents);
+        npcPanel.setItems(roomNpcs);
         setPlayerStartingLocation();
         hra.getHerniPlan().registruj(ZmenaHry.ZMENA_MISTNOSTI,() -> {
             aktualizuj();
@@ -85,6 +88,7 @@ public class HomeController{
         exitPanel.setCellFactory(param -> new ListCellProstor());
         inventoryPanel.setCellFactory(param -> new ListCellThing());
         roomPanel.setCellFactory(param -> new ListCellThing());
+        npcPanel.setCellFactory(param -> new ListCellNpc());
 
     }
 
@@ -118,6 +122,11 @@ public class HomeController{
         roomContents.clear();
         roomContents.addAll(hra.getHerniPlan().getAktualniProstor().getThings());
     }
+    @FXML
+    private void updateNpcList(){
+        roomNpcs.clear();
+        roomNpcs.addAll(hra.getHerniPlan().getAktualniProstor().getNpcs());
+    }
 
     @FXML
     private void updateRiddle(){
@@ -144,9 +153,11 @@ public class HomeController{
         if (hra.getHerniPlan().getAktualniProstor().isWasScanned()){
             updateRoomContents();
             updateRiddle();
+            updateNpcList();
         } else {
             roomContents.clear();
             answerOutput.clear();
+            roomNpcs.clear();
         }
         hra.getHerniPlan().getAktualniProstor().registruj(ZmenaHry.STAV_HRY,() -> aktualizuj());
         exitPanel.refresh();
@@ -228,6 +239,9 @@ public class HomeController{
             clearEverything();
             hra = new Hra();
             initialize();
+            playerInput.setDisable(false);
+            enterButton.setDisable(false);
+            exitPanel.setDisable(false);
         }
     }
     public void clearEverything(){
@@ -239,6 +253,7 @@ public class HomeController{
         roomContents.clear();
         npcLabel.setText("");
         answerOutput.clear();
+        roomNpcs.clear();
     }
     @FXML
     private void helpClick(ActionEvent event){
@@ -286,6 +301,15 @@ public class HomeController{
         updateRoomContents();
         inventoryPanel.refresh();
         roomPanel.refresh();
+    }
+    @FXML
+    private void clickNpcPanel(MouseEvent mouseEvent){
+        Npc targetNpc = npcPanel.getSelectionModel().getSelectedItem();
+        if (targetNpc == null) return;
+        String command = PrikazTalkTo.NAZEV + " " + targetNpc.getName();
+        processCommand(command);
+        updateNpcList();
+        npcPanel.refresh();
     }
     @FXML
     private void showUseOrDropPopup(MouseEvent mouseEvent) {
