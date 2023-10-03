@@ -92,7 +92,25 @@
                   <ListView fx:id="roomPanel" onMouseClicked="#clickRoomContents" prefHeight="200.0" prefWidth="200.0" />
                </content>
             </Tab>
-          <Tab text="Untitled Tab 2" />
+            <Tab text="NPCs">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <ListView fx:id="npcPanel" layoutX="2.0" layoutY="2.0" prefHeight="274.0" prefWidth="306.0" />
+                     </children></AnchorPane>
+              </content>
+            </Tab>
+            <Tab text="Riddle">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TextField fx:id="answerInput" layoutX="61.0" layoutY="223.0" onAction="#onAnswerButtonClick" />
+                        <Button fx:id="answerButton" layoutX="226.0" layoutY="223.0" mnemonicParsing="false" onAction="#onAnswerButtonClick" text="Answer" />
+                        <TextArea fx:id="answerOutput" layoutX="18.0" layoutY="14.0" prefHeight="167.0" prefWidth="278.0" />
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
         </tabs>
       </TabPane>
    </children>

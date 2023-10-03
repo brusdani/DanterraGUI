@@ -42,6 +42,14 @@ public class HomeController{
     private Label npcLabel;
     @FXML
     private ListView<Thing> roomPanel;
+    @FXML
+    private Button answerButton;
+    @FXML
+    private TextArea answerOutput;
+    @FXML
+    private TextField answerInput;
+    @FXML
+    private ListView<Npc> npcPanel;
 
     private IHra hra = new Hra();
 
@@ -111,6 +119,16 @@ public class HomeController{
         roomContents.addAll(hra.getHerniPlan().getAktualniProstor().getThings());
     }
 
+    @FXML
+    private void updateRiddle(){
+        answerOutput.clear();
+        if (hra.getHerniPlan().getAktualniProstor().getRiddle() != null) {
+            answerOutput.setText(hra.getHerniPlan().getAktualniProstor().getRiddle().getRiddle());
+        } else {
+            answerOutput.setText("There's no riddle in this room");
+        }
+    }
+
     private void updatePlayerLocation(){
         String prostor = hra.getHerniPlan().getAktualniProstor().getNazev();
         player.setLayoutX(roomCoordinates.get(prostor).getX());
@@ -125,13 +143,30 @@ public class HomeController{
         updateInventory();
         if (hra.getHerniPlan().getAktualniProstor().isWasScanned()){
             updateRoomContents();
+            updateRiddle();
         } else {
             roomContents.clear();
+            answerOutput.clear();
         }
         hra.getHerniPlan().getAktualniProstor().registruj(ZmenaHry.STAV_HRY,() -> aktualizuj());
         exitPanel.refresh();
         inventoryPanel.refresh();
         roomPanel.refresh();
+    }
+    @FXML
+    private void onAnswerButtonClick(ActionEvent event){
+        String playerAnswer = "answer " + answerInput.getText();
+        String answer = answerInput.getText();
+        answerInput.clear();
+        processCommand(playerAnswer);
+        if(hra.getHerniPlan().getAktualniProstor().getRiddle()!=null) {
+            if (answer.equals(hra.getHerniPlan().getAktualniProstor().getRiddle().getAnswer())) {
+                updateInventory();
+                hra.getHerniPlan().getAktualniProstor().setRiddle(null);
+                updateRiddle();
+                inventoryPanel.refresh();
+            }
+        }
     }
 
     private void processCommand(String command) {
@@ -203,6 +238,7 @@ public class HomeController{
         exitList.clear();
         roomContents.clear();
         npcLabel.setText("");
+        answerOutput.clear();
     }
     @FXML
     private void helpClick(ActionEvent event){
@@ -230,8 +266,10 @@ public class HomeController{
         processCommand(command);
         if (hra.getHerniPlan().getAktualniProstor().isWasScanned()){
             updateRoomContents();
+            updateRiddle();
         } else {
             roomContents.clear();
+            answerOutput.clear();
         }
         hra.getHerniPlan().getAktualniProstor().registruj(ZmenaHry.STAV_HRY,() -> aktualizuj());
         exitPanel.refresh();
