@@ -294,6 +294,14 @@ public class HomeController{
     private void clickExitPanel(MouseEvent mouseEvent){
         Prostor destination = exitPanel.getSelectionModel().getSelectedItem();
         if (destination == null) return;
+        if(destination.isLocked()){
+            String destinationString = destination.toString().replace("(Locked)", "");
+            String command = PrikazUnlock.NAZEV + " " + destinationString;
+            processCommand(command);
+            updateExitList();
+            updateInventory();
+            return;
+        }
         String command = PrikazJdi.NAZEV + " " + destination;
         processCommand(command);
         if (hra.getHerniPlan().getAktualniProstor().isWasScanned()){
@@ -302,6 +310,7 @@ public class HomeController{
         } else {
             roomContents.clear();
             answerOutput.clear();
+            roomNpcs.clear();
         }
         hra.getHerniPlan().getAktualniProstor().registruj(ZmenaHry.STAV_HRY,() -> aktualizuj());
         exitPanel.refresh();
