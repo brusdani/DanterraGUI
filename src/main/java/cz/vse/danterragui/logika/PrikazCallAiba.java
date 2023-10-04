@@ -11,7 +11,7 @@ package cz.vse.danterragui.logika;
 
 public class PrikazCallAiba implements IPrikaz {
 
-    private static final String NAZEV = "callAiba";
+    public static final String NAZEV = "callAiba";
     private Aiba aiba;
 
     /**

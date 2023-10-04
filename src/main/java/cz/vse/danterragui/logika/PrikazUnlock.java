@@ -11,7 +11,7 @@ import cz.vse.danterragui.main.HomeController;
 
 public class PrikazUnlock implements  IPrikaz {
 
-    private static final String NAZEV = "unlock";
+    public static final String NAZEV = "unlock";
     private final HerniPlan herniPlan;
     private Inventory inventory;
 

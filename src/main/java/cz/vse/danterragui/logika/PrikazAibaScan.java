@@ -9,7 +9,7 @@ package cz.vse.danterragui.logika;
  */
 
 public class PrikazAibaScan implements IPrikaz {
-    private static final String NAZEV = "aibaScan";
+    public static final String NAZEV = "aibaScan";
 
     private Aiba aiba;
     private final HerniPlan herniPlan;

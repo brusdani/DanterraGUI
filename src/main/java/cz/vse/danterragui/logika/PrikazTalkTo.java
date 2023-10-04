@@ -8,7 +8,7 @@ package cz.vse.danterragui.logika;
 
 public class PrikazTalkTo implements IPrikaz {
 
-    private static final String NAZEV = "talkTo";
+    public static final String NAZEV = "talkTo";
 
     private final HerniPlan herniPlan;
     private Npc npc;

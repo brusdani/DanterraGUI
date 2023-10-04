@@ -10,7 +10,7 @@ package cz.vse.danterragui.logika;
 
 public class PrikazPickup implements IPrikaz{
 
-    private static final String NAZEV = "pickup";
+    public static final String NAZEV = "pickup";
 
     private final HerniPlan herniPlan;
     private Inventory inventory;

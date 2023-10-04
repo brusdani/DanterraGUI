@@ -13,6 +13,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.web.WebView;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
@@ -37,11 +38,29 @@ public class HomeController{
     private ImageView player;
     @FXML
     private ListView<Thing> inventoryPanel;
+    @FXML
+    private Label npcLabel;
+    @FXML
+    private ListView<Thing> roomPanel;
+    @FXML
+    private Button answerButton;
+    @FXML
+    private TextArea answerOutput;
+    @FXML
+    private TextField answerInput;
+    @FXML
+    private ListView<Npc> npcPanel;
+    @FXML
+    private Button aibaButton;
 
     private IHra hra = new Hra();
 
     private ObservableList<Prostor> exitList = FXCollections.observableArrayList();
     private ObservableList<Thing> inventory = FXCollections.observableArrayList();
+
+    private ObservableList<Thing> roomContents = FXCollections.observableArrayList();
+
+    private ObservableList<Npc> roomNpcs = FXCollections.observableArrayList();
 
     private NpcImageView npcImageView = new NpcImageView();
 
@@ -59,6 +78,8 @@ public class HomeController{
         Platform.runLater(() -> playerInput.requestFocus());
         exitPanel.setItems(exitList);
         inventoryPanel.setItems(inventory);
+        roomPanel.setItems(roomContents);
+        npcPanel.setItems(roomNpcs);
         setPlayerStartingLocation();
         hra.getHerniPlan().registruj(ZmenaHry.ZMENA_MISTNOSTI,() -> {
             aktualizuj();
@@ -68,6 +89,8 @@ public class HomeController{
         setRoomCoordinates();
         exitPanel.setCellFactory(param -> new ListCellProstor());
         inventoryPanel.setCellFactory(param -> new ListCellThing());
+        roomPanel.setCellFactory(param -> new ListCellThing());
+        npcPanel.setCellFactory(param -> new ListCellNpc());
 
     }
 
@@ -96,6 +119,26 @@ public class HomeController{
         inventory.clear();
         inventory.addAll(hra.getInventory().getItemsList());
     }
+    @FXML
+    private void updateRoomContents(){
+        roomContents.clear();
+        roomContents.addAll(hra.getHerniPlan().getAktualniProstor().getThings());
+    }
+    @FXML
+    private void updateNpcList(){
+        roomNpcs.clear();
+        roomNpcs.addAll(hra.getHerniPlan().getAktualniProstor().getNpcs());
+    }
+
+    @FXML
+    private void updateRiddle(){
+        answerOutput.clear();
+        if (hra.getHerniPlan().getAktualniProstor().getRiddle() != null) {
+            answerOutput.setText(hra.getHerniPlan().getAktualniProstor().getRiddle().getRiddle());
+        } else {
+            answerOutput.setText("There's no riddle in this room");
+        }
+    }
 
     private void updatePlayerLocation(){
         String prostor = hra.getHerniPlan().getAktualniProstor().getNazev();
@@ -109,9 +152,49 @@ public class HomeController{
         playerInput.clear();
         processCommand(command);
         updateInventory();
+        if (hra.getHerniPlan().getAktualniProstor().isWasScanned()){
+            updateRoomContents();
+            updateRiddle();
+            updateNpcList();
+        } else {
+            roomContents.clear();
+            answerOutput.clear();
+            roomNpcs.clear();
+        }
         hra.getHerniPlan().getAktualniProstor().registruj(ZmenaHry.STAV_HRY,() -> aktualizuj());
         exitPanel.refresh();
         inventoryPanel.refresh();
+        roomPanel.refresh();
+    }
+    @FXML
+    private void onAnswerButtonClick(ActionEvent event){
+        String playerAnswer = "answer " + answerInput.getText();
+        String answer = answerInput.getText();
+        answerInput.clear();
+        processCommand(playerAnswer);
+        if(hra.getHerniPlan().getAktualniProstor().getRiddle()!=null) {
+            if (answer.equals(hra.getHerniPlan().getAktualniProstor().getRiddle().getAnswer())) {
+                updateInventory();
+                hra.getHerniPlan().getAktualniProstor().setRiddle(null);
+                updateRiddle();
+                inventoryPanel.refresh();
+            }
+        }
+    }
+    @FXML
+    private void onAibaButtonClick(ActionEvent event){
+        if (!hra.getAiba().isSummoned()) {
+            String command = PrikazCallAiba.NAZEV;
+            processCommand(command);
+            aibaButton.setText("aibaScan");
+        } else {
+            String command = PrikazAibaScan.NAZEV;
+            processCommand(command);
+            updateRoomContents();
+            updateRiddle();
+            updateNpcList();
+            aktualizuj();
+        }
     }
 
     private void processCommand(String command) {
@@ -122,6 +205,7 @@ public class HomeController{
         npcDialogue.appendText(result);
         if(hra.getAiba().isSummoned()) {
             npcImage.setImage(aibaImage);
+            npcLabel.setText("Aiba");
         }
         handleNpcDialogue(command,result,npcImage);
 
@@ -135,8 +219,13 @@ public class HomeController{
 
             if (npcImage != null && !result.equals("Nikdo takový tu není")) {
                 imageView.setImage(npcImage);
-            } else {
+                npcLabel.setText(npcName);
+            } else if (hra.getAiba().isSummoned()) {
                 imageView.setImage(aibaImage);
+                npcLabel.setText("Aiba");
+            } else {
+                imageView.setImage(null);
+                npcLabel.setText("");
             }
         }
     }
@@ -167,6 +256,9 @@ public class HomeController{
             clearEverything();
             hra = new Hra();
             initialize();
+            playerInput.setDisable(false);
+            enterButton.setDisable(false);
+            exitPanel.setDisable(false);
         }
     }
     public void clearEverything(){
@@ -175,6 +267,10 @@ public class HomeController{
         npcImage.setImage(null);
         inventory.clear();
         exitList.clear();
+        roomContents.clear();
+        npcLabel.setText("");
+        answerOutput.clear();
+        roomNpcs.clear();
     }
     @FXML
     private void helpClick(ActionEvent event){
@@ -188,22 +284,90 @@ public class HomeController{
 
 
     public void aktualizuj() {
-        //System.out.printf("Aktualizuji");
         if (hra.getHerniPlan().getAktualniProstor().isWasScanned()){
             updateExitList();
-        } else
+        } else {
             exitList.clear();
-
+        }
     }
     @FXML
     private void clickExitPanel(MouseEvent mouseEvent){
         Prostor destination = exitPanel.getSelectionModel().getSelectedItem();
         if (destination == null) return;
+        if(destination.isLocked()){
+            String destinationString = destination.toString().replace("(Locked)", "");
+            String command = PrikazUnlock.NAZEV + " " + destinationString;
+            processCommand(command);
+            updateExitList();
+            updateInventory();
+            return;
+        }
         String command = PrikazJdi.NAZEV + " " + destination;
         processCommand(command);
+        if (hra.getHerniPlan().getAktualniProstor().isWasScanned()){
+            updateRoomContents();
+            updateRiddle();
+        } else {
+            roomContents.clear();
+            answerOutput.clear();
+            roomNpcs.clear();
+        }
         hra.getHerniPlan().getAktualniProstor().registruj(ZmenaHry.STAV_HRY,() -> aktualizuj());
         exitPanel.refresh();
+        roomPanel.refresh();
 
     }
+    @FXML
+    private void clickRoomContents(MouseEvent mouseEvent){
+        Thing targetItem = roomPanel.getSelectionModel().getSelectedItem();
+        if (targetItem == null) return;
+        String command = PrikazPickup.NAZEV + " " + targetItem;
+        processCommand(command);
+        updateInventory();
+        updateRoomContents();
+        inventoryPanel.refresh();
+        roomPanel.refresh();
+    }
+    @FXML
+    private void clickNpcPanel(MouseEvent mouseEvent){
+        Npc targetNpc = npcPanel.getSelectionModel().getSelectedItem();
+        if (targetNpc == null) return;
+        String command = PrikazTalkTo.NAZEV + " " + targetNpc.getName();
+        processCommand(command);
+        updateNpcList();
+        npcPanel.refresh();
+    }
+    @FXML
+    private void showUseOrDropPopup(MouseEvent mouseEvent) {
+        Thing targetItem = inventoryPanel.getSelectionModel().getSelectedItem();
+        if (targetItem == null) return;
 
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.setTitle("Use or Drop Item");
+        alert.setHeaderText("What would you like to do with the item?");
+        alert.setContentText("Choose an option:");
+
+        ButtonType useButton = new ButtonType("Use");
+        ButtonType dropButton = new ButtonType("Drop");
+        ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+        alert.getButtonTypes().setAll(useButton, dropButton, cancelButton);
+
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.isPresent()) {
+            if (result.get() == useButton) {
+                String command = PrikazUse.NAZEV + " " + targetItem;
+                processCommand(command);
+            } else if (result.get() == dropButton) {
+                String command = PrikazDrop.NAZEV + " " + targetItem;
+                processCommand(command);
+            }
+            updateInventory();
+            updateRoomContents();
+            inventoryPanel.refresh();
+            roomPanel.refresh();
+        }
+    }
 }
