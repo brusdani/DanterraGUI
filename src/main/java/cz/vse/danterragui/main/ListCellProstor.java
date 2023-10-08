@@ -18,10 +18,15 @@ public class ListCellProstor extends ListCell<Prostor> {
 
     private void setRoomImages(){
         roomImages.put("cellar",new Image(getClass().getResource("Prostory/cellar.jpg").toExternalForm()));
-        roomImages.put("hall",new Image(getClass().getResource("Prostory/cellar.jpg").toExternalForm()));
-        roomImages.put("tower",new Image(getClass().getResource("Prostory/cellar.jpg").toExternalForm()));
+        roomImages.put("hall",new Image(getClass().getResource("Prostory/Hall.jpg").toExternalForm()));
+        roomImages.put("tower",new Image(getClass().getResource("Prostory/Tower.jpg").toExternalForm()));
         roomImages.put("lock",new Image(getClass().getResource("Prostory/lock.jpg").toExternalForm()));
-        roomImages.put("treasure_room",new Image(getClass().getResource("Prostory/cellar.jpg").toExternalForm()));
+        roomImages.put("treasure_room",new Image(getClass().getResource("Prostory/TreasureRoom.jpg").toExternalForm()));
+        roomImages.put("gate",new Image(getClass().getResource("Prostory/Gate.jpg").toExternalForm()));
+        roomImages.put("forest",new Image(getClass().getResource("Prostory/Forest.jpg").toExternalForm()));
+        roomImages.put("cliffs",new Image(getClass().getResource("Prostory/Cliffs.jpg").toExternalForm()));
+        roomImages.put("village",new Image(getClass().getResource("Prostory/Village.jpg").toExternalForm()));
+        roomImages.put("pub",new Image(getClass().getResource("Prostory/Pub.jpg").toExternalForm()));
     }
 
     @Override

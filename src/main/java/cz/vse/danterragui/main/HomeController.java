@@ -113,6 +113,7 @@ public class HomeController{
         roomCoordinates.put("cliffs", new Point2D(144,224));
         roomCoordinates.put("village", new Point2D(230,58));
         roomCoordinates.put("pub", new Point2D(300,56));
+        roomCoordinates.put("mare_lamentorum", new Point2D(323,151));
     }
     private void setPlayerStartingLocation(){
         player.setLayoutX(127);

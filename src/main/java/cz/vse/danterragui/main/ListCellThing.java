@@ -17,7 +17,19 @@ public class ListCellThing extends ListCell<Thing> {
 
     private void setThingImages(){
         thingImages.put("lantern", new Image(getClass().getResource("Things/Lantern.png").toExternalForm()));
-        thingImages.put("chain", new Image(getClass().getResource("Things/Lantern.png").toExternalForm()));
+        thingImages.put("chain", new Image(getClass().getResource("Things/Chain.jpg").toExternalForm()));
+        thingImages.put("treasureRoom_key", new Image(getClass().getResource("Things/Key.jpg").toExternalForm()));
+        thingImages.put("gate_key", new Image(getClass().getResource("Things/Key.jpg").toExternalForm()));
+        thingImages.put("chakrams", new Image(getClass().getResource("Things/Chakram.png").toExternalForm()));
+        thingImages.put("necklace", new Image(getClass().getResource("Things/Necklace.jpg").toExternalForm()));
+        thingImages.put("ring", new Image(getClass().getResource("Things/Ring.png").toExternalForm()));
+        thingImages.put("note_u", new Image(getClass().getResource("Things/Note.png").toExternalForm()));
+        thingImages.put("sword", new Image(getClass().getResource("Things/Sword.png").toExternalForm()));
+        thingImages.put("advice_u", new Image(getClass().getResource("Things/Advice.jpg").toExternalForm()));
+        thingImages.put("moonstone", new Image(getClass().getResource("Things/Moon.jpg").toExternalForm()));
+        thingImages.put("sunstone", new Image(getClass().getResource("Things/Sun.png").toExternalForm()));
+        thingImages.put("ticket", new Image(getClass().getResource("Things/Ticket.png").toExternalForm()));
+
     }
 
     @Override
