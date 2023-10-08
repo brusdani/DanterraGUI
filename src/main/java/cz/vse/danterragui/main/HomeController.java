@@ -67,8 +67,6 @@ public class HomeController{
     private Map<String, Point2D> roomCoordinates = new HashMap<>();
 
     private Image aibaImage = new Image("file:///C:/Users/Daniel/Pictures/Danterra_Pictures/Aiba.jpg");
-    //private Image aibaImage = new Image(getClass().getResource("Prostory/cellar.jpg").toExternalForm());
-    private Image ghostImage = new Image("file:///C:/Users/Daniel/Pictures/Danterra_Pictures/Ghost.jpg");
 
     @FXML
     private void initialize(){
@@ -81,11 +79,20 @@ public class HomeController{
         roomPanel.setItems(roomContents);
         npcPanel.setItems(roomNpcs);
         setPlayerStartingLocation();
+        registerStavHryObserver();
         hra.getHerniPlan().registruj(ZmenaHry.ZMENA_MISTNOSTI,() -> {
-            aktualizuj();
+            updateExitPanel();
             updatePlayerLocation();
+            updateNpcList();
+            updateRiddle();
+            updateRoomContents();
+            registerStavHryObserver();
         });
-        //hra.registruj(ZmenaHry.KONEC_HRY, () -> updateGameEnding());
+        hra.getInventory().registruj(ZmenaHry.STAV_INVENTARE, () -> {
+            updateInventory();
+            updateRoomContents();
+        });
+        hra.registruj(ZmenaHry.KONEC_HRY, () -> updateGameEnding());
         setRoomCoordinates();
         exitPanel.setCellFactory(param -> new ListCellProstor());
         inventoryPanel.setCellFactory(param -> new ListCellThing());
@@ -122,21 +129,27 @@ public class HomeController{
     @FXML
     private void updateRoomContents(){
         roomContents.clear();
-        roomContents.addAll(hra.getHerniPlan().getAktualniProstor().getThings());
+        if(hra.getHerniPlan().getAktualniProstor().isWasScanned()) {
+            roomContents.addAll(hra.getHerniPlan().getAktualniProstor().getThings());
+        }
     }
     @FXML
     private void updateNpcList(){
         roomNpcs.clear();
-        roomNpcs.addAll(hra.getHerniPlan().getAktualniProstor().getNpcs());
+        if(hra.getHerniPlan().getAktualniProstor().isWasScanned()) {
+            roomNpcs.addAll(hra.getHerniPlan().getAktualniProstor().getNpcs());
+        }
     }
 
     @FXML
     private void updateRiddle(){
         answerOutput.clear();
-        if (hra.getHerniPlan().getAktualniProstor().getRiddle() != null) {
-            answerOutput.setText(hra.getHerniPlan().getAktualniProstor().getRiddle().getRiddle());
-        } else {
-            answerOutput.setText("There's no riddle in this room");
+        if(hra.getHerniPlan().getAktualniProstor().isWasScanned()) {
+            if (hra.getHerniPlan().getAktualniProstor().getRiddle() != null) {
+                answerOutput.setText(hra.getHerniPlan().getAktualniProstor().getRiddle().getRiddle());
+            } else {
+                answerOutput.setText("There's no riddle in this room");
+            }
         }
     }
 
@@ -151,17 +164,17 @@ public class HomeController{
         String command = playerInput.getText();
         playerInput.clear();
         processCommand(command);
-        updateInventory();
+        //updateInventory();
         if (hra.getHerniPlan().getAktualniProstor().isWasScanned()){
-            updateRoomContents();
-            updateRiddle();
-            updateNpcList();
+            //updateRoomContents();
+            //updateRiddle();
+            //updateNpcList();
         } else {
             roomContents.clear();
             answerOutput.clear();
             roomNpcs.clear();
         }
-        hra.getHerniPlan().getAktualniProstor().registruj(ZmenaHry.STAV_HRY,() -> aktualizuj());
+        //hra.getHerniPlan().getAktualniProstor().registruj(ZmenaHry.STAV_HRY,() -> aktualizuj());
         exitPanel.refresh();
         inventoryPanel.refresh();
         roomPanel.refresh();
@@ -169,17 +182,17 @@ public class HomeController{
     @FXML
     private void onAnswerButtonClick(ActionEvent event){
         String playerAnswer = "answer " + answerInput.getText();
-        String answer = answerInput.getText();
+        //String answer = answerInput.getText();
         answerInput.clear();
         processCommand(playerAnswer);
-        if(hra.getHerniPlan().getAktualniProstor().getRiddle()!=null) {
-            if (answer.equals(hra.getHerniPlan().getAktualniProstor().getRiddle().getAnswer())) {
-                updateInventory();
-                hra.getHerniPlan().getAktualniProstor().setRiddle(null);
-                updateRiddle();
-                inventoryPanel.refresh();
-            }
-        }
+//        if(hra.getHerniPlan().getAktualniProstor().getRiddle()!=null) {
+//            if (answer.equals(hra.getHerniPlan().getAktualniProstor().getRiddle().getAnswer())) {
+//                updateInventory();
+//                hra.getHerniPlan().getAktualniProstor().setRiddle(null);
+//                updateRiddle();
+//                inventoryPanel.refresh();
+//            }
+//        }
     }
     @FXML
     private void onAibaButtonClick(ActionEvent event){
@@ -190,10 +203,10 @@ public class HomeController{
         } else {
             String command = PrikazAibaScan.NAZEV;
             processCommand(command);
-            updateRoomContents();
-            updateRiddle();
-            updateNpcList();
-            aktualizuj();
+//            updateRoomContents();
+//            updateRiddle();
+//            updateNpcList();
+//            updateExitPanel();
         }
     }
 
@@ -208,7 +221,6 @@ public class HomeController{
             npcLabel.setText("Aiba");
         }
         handleNpcDialogue(command,result,npcImage);
-
         updateGameEnding();
     }
 
@@ -256,6 +268,7 @@ public class HomeController{
             clearEverything();
             hra = new Hra();
             initialize();
+            aibaButton.setText("Call Aiba");
             playerInput.setDisable(false);
             enterButton.setDisable(false);
             exitPanel.setDisable(false);
@@ -283,7 +296,7 @@ public class HomeController{
     }
 
 
-    public void aktualizuj() {
+    public void updateExitPanel() {
         if (hra.getHerniPlan().getAktualniProstor().isWasScanned()){
             updateExitList();
         } else {
@@ -299,20 +312,20 @@ public class HomeController{
             String command = PrikazUnlock.NAZEV + " " + destinationString;
             processCommand(command);
             updateExitList();
-            updateInventory();
+            //updateInventory();
             return;
         }
         String command = PrikazJdi.NAZEV + " " + destination;
         processCommand(command);
-        if (hra.getHerniPlan().getAktualniProstor().isWasScanned()){
-            updateRoomContents();
-            updateRiddle();
-        } else {
-            roomContents.clear();
-            answerOutput.clear();
-            roomNpcs.clear();
-        }
-        hra.getHerniPlan().getAktualniProstor().registruj(ZmenaHry.STAV_HRY,() -> aktualizuj());
+        //if (hra.getHerniPlan().getAktualniProstor().isWasScanned()){
+            //updateRoomContents();
+            //updateRiddle();
+        //} else {
+            //roomContents.clear();
+            //answerOutput.clear();
+            //roomNpcs.clear();
+        //}
+        //hra.getHerniPlan().getAktualniProstor().registruj(ZmenaHry.STAV_INVENTARE,() -> aktualizuj());
         exitPanel.refresh();
         roomPanel.refresh();
 
@@ -323,8 +336,8 @@ public class HomeController{
         if (targetItem == null) return;
         String command = PrikazPickup.NAZEV + " " + targetItem;
         processCommand(command);
-        updateInventory();
-        updateRoomContents();
+        //updateInventory();
+        //updateRoomContents();
         inventoryPanel.refresh();
         roomPanel.refresh();
     }
@@ -369,5 +382,13 @@ public class HomeController{
             inventoryPanel.refresh();
             roomPanel.refresh();
         }
+    }
+    private void registerStavHryObserver() {
+        hra.getHerniPlan().getAktualniProstor().registruj(ZmenaHry.STAV_PROSTORU, () -> {
+            updateExitPanel();
+            updateRoomContents();
+            updateRiddle();
+            updateNpcList();
+        });
     }
 }

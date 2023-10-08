@@ -70,7 +70,8 @@ public class Prostor implements PredmetPozorovani {
 
     public void setLock(boolean locked) {
         this.locked = locked;
-        notifyObserver(ZmenaHry.STAV_HRY);
+        System.out.println("observer notified");
+        notifyObserver(ZmenaHry.STAV_PROSTORU);
     }
 
     /**
@@ -106,6 +107,7 @@ public class Prostor implements PredmetPozorovani {
      */
     public void setRiddle(Riddle riddle) {
         this.riddle = riddle;
+        notifyObserver(ZmenaHry.STAV_PROSTORU);
     }
 
     /**
@@ -140,7 +142,7 @@ public class Prostor implements PredmetPozorovani {
     public void setWasScanned(boolean wasScanned) {
         //System.out.printf("Was scanned was called");
         this.wasScanned = wasScanned;
-        notifyObserver(ZmenaHry.STAV_HRY);
+        notifyObserver(ZmenaHry.STAV_PROSTORU);
     }
 
     private void notifyObserver(ZmenaHry zmenaHry) {

@@ -1,9 +1,11 @@
 package cz.vse.danterragui.logika;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import cz.vse.danterragui.main.Pozorovatel;
+import cz.vse.danterragui.main.PredmetPozorovani;
+import cz.vse.danterragui.main.ZmenaHry;
+
+import java.util.*;
+
 /**
  * Class Inventory - Represents player's inventory
  * Allows players to carry Things with them
@@ -11,9 +13,18 @@ import java.util.Set;
  * @version 0.9, May 2023
  */
 
-public class Inventory {
+public class Inventory implements PredmetPozorovani {
     private HashMap<String, Thing> items = new HashMap<>();
+
+    private Map<ZmenaHry, Set<Pozorovatel>> seznamPozorovatelu = new HashMap<>();
     private int capacity = 10;
+
+    public Inventory(HashMap<String, Thing> items) {
+        this.items = items;
+        for(ZmenaHry zmenaHry : ZmenaHry.values()){
+            seznamPozorovatelu.put(zmenaHry,new HashSet<>());
+        }
+    }
 
     /**
      * Adds thing into inventory
@@ -23,6 +34,7 @@ public class Inventory {
     public HashMap<String,Thing> addThing(Thing item) {
         items.put(item.getName(), item);
         System.out.println("We added the item: " + item.getName());
+        upozorniPozorovatele(ZmenaHry.STAV_INVENTARE);
         return items;
     }
 
@@ -34,6 +46,7 @@ public class Inventory {
 
     public HashMap<String, Thing> removeItem(String nameThing) {
         items.remove(nameThing);
+        upozorniPozorovatele(ZmenaHry.STAV_INVENTARE);
         return items;
     }
 
@@ -110,6 +123,7 @@ public class Inventory {
     public HashMap<String, Thing> removeRealItem(Thing item) {
         //System.out.println("item was removed " + item);
         items.values().remove(item);
+        upozorniPozorovatele(ZmenaHry.STAV_INVENTARE);
         return items;
     }
 
@@ -119,6 +133,16 @@ public class Inventory {
      */
     public int inventorySize(){
         return items.size();
+    }
+
+    @Override
+    public void registruj(ZmenaHry zmenaHry, Pozorovatel pozorovatel){
+        seznamPozorovatelu.get(zmenaHry).add(pozorovatel);
+    }
+    private void upozorniPozorovatele(ZmenaHry zmenaHry){
+        for(Pozorovatel pozorovatel: seznamPozorovatelu.get(zmenaHry)){
+            pozorovatel.aktualizuj();
+        }
     }
 }
 
