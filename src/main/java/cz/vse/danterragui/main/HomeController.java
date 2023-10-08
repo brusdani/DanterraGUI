@@ -52,6 +52,8 @@ public class HomeController{
     private ListView<Npc> npcPanel;
     @FXML
     private Button aibaButton;
+    @FXML
+    private Button okButton;
 
     private IHra hra = new Hra();
 
@@ -208,6 +210,12 @@ public class HomeController{
 //            updateNpcList();
 //            updateExitPanel();
         }
+    }
+    @FXML
+    private void onOkButtonClick(ActionEvent event) {
+        npcDialogue.clear();
+        npcImage.setImage(null);
+        npcLabel.setText("");
     }
 
     private void processCommand(String command) {
