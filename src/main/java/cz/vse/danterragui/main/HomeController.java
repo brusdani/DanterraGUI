@@ -20,6 +20,12 @@ import javafx.util.Callback;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+/**
+ * Class HomeController - Controller class for the game's graphical user interface (GUI).
+ * Handles user interactions and updates the game state accordingly.
+ * @author Daniel Brus
+ * @version 1.0 , October 2023
+ */
 
 public class HomeController{
     @FXML
@@ -54,6 +60,8 @@ public class HomeController{
     private Button aibaButton;
     @FXML
     private Button okButton;
+    @FXML
+    private TabPane tabPane;
 
     private IHra hra = new Hra();
 
@@ -69,7 +77,10 @@ public class HomeController{
     private Map<String, Point2D> roomCoordinates = new HashMap<>();
 
     private Image aibaImage = new Image("file:///C:/Users/Daniel/Pictures/Danterra_Pictures/Aiba.jpg");
-
+    /**
+     * Initializes the controller and sets up the initial game state.
+     * Called when the FXML file is loaded.
+     */
     @FXML
     private void initialize(){
         textAreaOutput.appendText(hra.vratUvitani()+"\n");
@@ -103,6 +114,9 @@ public class HomeController{
 
     }
 
+    /**
+     * Sets coordinates for each room in the minimap
+     */
     private void setRoomCoordinates() {
         roomCoordinates.put("hall", new Point2D(125,145));
         roomCoordinates.put("cellar", new Point2D(127,59));
@@ -115,20 +129,40 @@ public class HomeController{
         roomCoordinates.put("pub", new Point2D(300,56));
         roomCoordinates.put("mare_lamentorum", new Point2D(323,151));
     }
+
+    /**
+     * Sets starting coordinates for the player on the minimap
+     */
     private void setPlayerStartingLocation(){
         player.setLayoutX(127);
         player.setLayoutY(59);
     }
+
+    /**
+     * Updates list of exits based on current game state
+     * Called every time player changes (scanned) rooms
+     */
     @FXML
     private void updateExitList(){
         exitList.clear();
         exitList.addAll(hra.getHerniPlan().getAktualniProstor().getVychody());
     }
+
+    /**
+     * Updates inventory based on current game state
+     * called every time item is picked up or dropped
+     */
     @FXML
     private void updateInventory() {
         inventory.clear();
         inventory.addAll(hra.getInventory().getItemsList());
     }
+
+    /**
+     * Updates room contents - items available in the room
+     * called every time player location changes or and item
+     * gets picked up or is dropped
+     */
     @FXML
     private void updateRoomContents(){
         roomContents.clear();
@@ -136,6 +170,12 @@ public class HomeController{
             roomContents.addAll(hra.getHerniPlan().getAktualniProstor().getThings());
         }
     }
+
+    /**
+     * Updates Npc list based on the current game state
+     * called every time player changes room or npc
+     * was talked to
+     */
     @FXML
     private void updateNpcList(){
         roomNpcs.clear();
@@ -144,6 +184,10 @@ public class HomeController{
         }
     }
 
+    /**
+     * Updates riddle listView based on the current game state
+     * called every time riddle is solved or player changes the room
+     */
     @FXML
     private void updateRiddle(){
         answerOutput.clear();
@@ -156,12 +200,19 @@ public class HomeController{
         }
     }
 
+    /**
+     * Updates player location every time player changes location
+     */
     private void updatePlayerLocation(){
         String prostor = hra.getHerniPlan().getAktualniProstor().getNazev();
         player.setLayoutX(roomCoordinates.get(prostor).getX());
         player.setLayoutY(roomCoordinates.get(prostor).getY());
     }
 
+    /**
+     * Reads player's input. Clears the input field
+     * @param event - Player presses enter or clicks enter button
+     */
     @FXML
     private void onEnterButtonClick(ActionEvent event){
         String command = playerInput.getText();
@@ -182,6 +233,11 @@ public class HomeController{
         inventoryPanel.refresh();
         roomPanel.refresh();
     }
+
+    /**
+     * Handles answer input
+     * @param event - Click on answer button
+     */
     @FXML
     private void onAnswerButtonClick(ActionEvent event){
         String playerAnswer = "answer " + answerInput.getText();
@@ -197,6 +253,11 @@ public class HomeController{
 //            }
 //        }
     }
+
+    /**
+     * Handles player calling Aiba and room scans
+     * @param event - click on Aiba button
+     */
     @FXML
     private void onAibaButtonClick(ActionEvent event){
         if (!hra.getAiba().isSummoned()) {
@@ -212,6 +273,11 @@ public class HomeController{
 //            updateExitPanel();
         }
     }
+
+    /**
+     * Clears character dialogue window
+     * @param event - click on "OK" button
+     */
     @FXML
     private void onOkButtonClick(ActionEvent event) {
         npcDialogue.clear();
@@ -219,19 +285,36 @@ public class HomeController{
         npcLabel.setText("");
     }
 
+    /**
+     * processes user commands and appends result to text area
+     * and npc dialogue area
+     * @param command String - player's command that'll be executed
+     */
+
     private void processCommand(String command) {
         textAreaOutput.appendText(">"+ command + "\n");
         String result = hra.zpracujPrikaz(command);
-        //textAreaOutput.appendText(result+"\n");
-        npcDialogue.clear();
-        npcDialogue.appendText(result);
-        if(hra.getAiba().isSummoned()) {
-            npcImage.setImage(aibaImage);
-            npcLabel.setText("Aiba");
+        if(command.equals("sail")){
+            npcDialogue.clear();
+            textAreaOutput.appendText(result+"\n");
+        } else {
+            npcDialogue.clear();
+            npcDialogue.appendText(result);
+            if (hra.getAiba().isSummoned()) {
+                npcImage.setImage(aibaImage);
+                npcLabel.setText("Aiba");
+            }
+            handleNpcDialogue(command, result, npcImage);
+            updateGameEnding();
         }
-        handleNpcDialogue(command,result,npcImage);
-        updateGameEnding();
     }
+
+    /**
+     * Handles interaction with NPCs
+     * @param command - player's command
+     * @param result - Result of the command
+     * @param imageView - NPC image
+     */
 
     private void handleNpcDialogue(String command, String result, ImageView imageView){
         if (command.startsWith("talkTo")) {
@@ -251,6 +334,9 @@ public class HomeController{
         }
     }
 
+    /**
+     * Sets a game ending graphics when the game is over
+     */
     private void updateGameEnding() {
         if(hra.konecHry()){
             textAreaOutput.appendText(hra.ending());
@@ -258,9 +344,15 @@ public class HomeController{
             playerInput.setDisable(true);
             enterButton.setDisable(true);
             exitPanel.setDisable(true);
+            tabPane.setDisable(true);
+
         }
     }
 
+    /**
+     * Terminatest game
+     * @param event - player confirms they're sure to quit the game
+     */
     @FXML
     public void terminateGame(ActionEvent event){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION,"Are you sure you want to quit the game?");
@@ -269,6 +361,11 @@ public class HomeController{
             Platform.exit();
         }
     }
+
+    /**
+     * Starts a new game
+     * @param event - player clicks on new game button
+     */
     @FXML
     public void newGame(ActionEvent event){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION,"Are you sure you want to restart the game?");
@@ -281,8 +378,13 @@ public class HomeController{
             playerInput.setDisable(false);
             enterButton.setDisable(false);
             exitPanel.setDisable(false);
+            tabPane.setDisable(false);
         }
     }
+
+    /**
+     * Clears every piece of UI when the game restarts
+     */
     public void clearEverything(){
         textAreaOutput.clear();
         npcDialogue.clear();

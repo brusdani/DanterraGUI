@@ -9,12 +9,21 @@ import javafx.scene.image.ImageView;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Class ListCellThing - Defines how should Thing listCell look like
+ * in a ListView. Also dealing with updating cells
+ * @author Daniel Brus
+ * @version 1.0 , October 2023
+ */
+
 public class ListCellThing extends ListCell<Thing> {
     public ListCellThing() {
         setThingImages(); // Call this method to populate the map in the constructor
     }
     private Map<String, Image> thingImages = new HashMap<>();
-
+    /**
+     * Matches each "Thing" from the game with its personal image
+     */
     private void setThingImages(){
         thingImages.put("lantern", new Image(getClass().getResource("Things/Lantern.png").toExternalForm()));
         thingImages.put("chain", new Image(getClass().getResource("Things/Chain.jpg").toExternalForm()));
@@ -31,7 +40,11 @@ public class ListCellThing extends ListCell<Thing> {
         thingImages.put("ticket", new Image(getClass().getResource("Things/Ticket.png").toExternalForm()));
 
     }
-
+    /**
+     * Updates list cell in ListView
+     * @param item - Thing class within a cell
+     * @param empty - passes information whether cell is empty
+     */
     @Override
     protected void updateItem(Thing item, boolean empty) {
         super.updateItem(item, empty);

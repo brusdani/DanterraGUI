@@ -87,7 +87,7 @@
             <Label layoutX="14.0" layoutY="6.0" prefHeight="26.0" prefWidth="58.0" text="Inventory:" />
          </children>
       </AnchorPane>
-      <TabPane fx:id="" layoutX="20.0" layoutY="404.0" prefHeight="306.0" prefWidth="314.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane fx:id="tabPane" layoutX="20.0" layoutY="404.0" prefHeight="306.0" prefWidth="314.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab text="Things">
                <content>

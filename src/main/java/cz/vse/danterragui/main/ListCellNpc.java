@@ -9,13 +9,25 @@ import javafx.scene.image.ImageView;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Class ListCellNpc - Defines how should npc's listCell look like
+ * in a ListView. Also dealing with updating cells
+ * @author Daniel Brus
+ * @version 1.0 , October 2023
+ */
 public class ListCellNpc extends ListCell<Npc> {
 
+    /**
+     * Constructor
+     * Creates ListCellNpc
+     */
     public ListCellNpc(){
         setNpcImages();
     }
     private Map<String, Image> npcImages = new HashMap<>();
-
+    /**
+     * Matches each npc from the game with its personal image
+     */
     private void setNpcImages(){
         npcImages.put("aiba", new Image(getClass().getResource("Npcs/Aiba.jpg").toExternalForm()));
         npcImages.put("ghost", new Image(getClass().getResource("Npcs/Ghost.jpg").toExternalForm()));
@@ -29,6 +41,11 @@ public class ListCellNpc extends ListCell<Npc> {
         npcImages.put("monk", new Image(getClass().getResource("Npcs/Monk.jpg").toExternalForm()));
     }
 
+    /**
+     * Updates list cell in ListView
+     * @param npc - Npc class within a cell
+     * @param empty - passes information whether cell is empty
+     */
     @Override
     protected void updateItem(Npc npc, boolean empty) {
         super.updateItem(npc, empty);

@@ -8,14 +8,24 @@ import javafx.scene.image.ImageView;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Class ListCellProstor - Defines how should Prostor listCell look like
+ * in a ListView. Also dealing with updating cells
+ * @author Daniel Brus
+ * @version 1.0 , October 2023
+ */
 public class ListCellProstor extends ListCell<Prostor> {
-
+    /**
+     * Constructor
+     */
     public ListCellProstor() {
         setRoomImages(); // Call this method to populate the map in the constructor
     }
 
     private Map<String, Image> roomImages = new HashMap<>();
-
+    /**
+     * Matches each "Prostor"(room) from the game with its personal image
+     */
     private void setRoomImages(){
         roomImages.put("cellar",new Image(getClass().getResource("Prostory/cellar.jpg").toExternalForm()));
         roomImages.put("hall",new Image(getClass().getResource("Prostory/Hall.jpg").toExternalForm()));
@@ -28,7 +38,11 @@ public class ListCellProstor extends ListCell<Prostor> {
         roomImages.put("village",new Image(getClass().getResource("Prostory/Village.jpg").toExternalForm()));
         roomImages.put("pub",new Image(getClass().getResource("Prostory/Pub.jpg").toExternalForm()));
     }
-
+    /**
+     * Updates list cell in ListView
+     * @param prostor - Prostor class within a cell
+     * @param empty - passes information whether cell is empty
+     */
     @Override
     protected void updateItem(Prostor prostor, boolean empty) {
         super.updateItem(prostor, empty);
