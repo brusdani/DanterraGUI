@@ -138,14 +138,19 @@ public class Inventory implements PredmetPozorovani {
     public int inventorySize(){
         return items.size();
     }
-
+    /**
+     * * Registers an observer (Pozorovatel) for a specific game state change (ZmenaHry).
+     * @param zmenaHry The type of game change
+     * @param pozorovatel The observer to be registered for notifications
+     */
     @Override
     public void registruj(ZmenaHry zmenaHry, Pozorovatel pozorovatel){
         seznamPozorovatelu.get(zmenaHry).add(pozorovatel);
     }
+
     /**
-     * * Registers an observer (Pozorovatel) for a specific game state change (ZmenaHry).
-     * @param zmenaHry The type of game change
+     * Notifies and observer about state of the game changes
+     * @param zmenaHry Type of a specific game state change
      */
     private void upozorniPozorovatele(ZmenaHry zmenaHry){
         for(Pozorovatel pozorovatel: seznamPozorovatelu.get(zmenaHry)){

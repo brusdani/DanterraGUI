@@ -474,15 +474,15 @@ public class HomeController{
      * Allows players to talkTo NPCs by clicking on npc panel
      * @param mouseEvent click on npcListCell
      */
-    @FXML
-    private void clickNpcPanel(MouseEvent mouseEvent){
-        Npc targetNpc = npcPanel.getSelectionModel().getSelectedItem();
-        if (targetNpc == null) return;
-        String command = PrikazTalkTo.NAZEV + " " + targetNpc.getName();
-        processCommand(command);
-        updateNpcList();
-        npcPanel.refresh();
-    }
+//    @FXML
+//    private void clickNpcPanel(MouseEvent mouseEvent){
+//        Npc targetNpc = npcPanel.getSelectionModel().getSelectedItem();
+//        if (targetNpc == null) return;
+//        String command = PrikazTalkTo.NAZEV + " " + targetNpc.getName();
+//        processCommand(command);
+//        updateNpcList();
+//        npcPanel.refresh();
+//    }
 
     /**
      * Gives players opportunity to interact with items in inventory
@@ -522,6 +522,51 @@ public class HomeController{
             roomPanel.refresh();
         }
     }
+
+    @FXML
+    private void clickNpcPanel(MouseEvent mouseEvent) {
+        Npc targetNpc = npcPanel.getSelectionModel().getSelectedItem();
+        if (targetNpc == null) return;
+
+        ChoiceDialog<String> dialog = new ChoiceDialog<>("TalkTo", "GiveItem");
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.setTitle("TalkTo or GiveItem");
+        dialog.setHeaderText("What would you like to do?");
+        dialog.setContentText("Choose an option:");
+
+        Optional<String> result = dialog.showAndWait();
+
+        if (result.isPresent()) {
+            String choice = result.get();
+            String command;
+
+            if ("TalkTo".equals(choice)) {
+                command = PrikazTalkTo.NAZEV + " " + targetNpc.getName();
+            } else if ("GiveItem".equals(choice)) {
+                TextInputDialog itemDialog = new TextInputDialog();
+                itemDialog.setTitle("Give Item");
+                itemDialog.setHeaderText("Enter the name of the item you want to give:");
+                itemDialog.setContentText("Item Name:");
+
+                Optional<String> itemResult = itemDialog.showAndWait();
+                if (itemResult.isPresent() && !itemResult.get().trim().isEmpty()) {
+                    String itemName = itemResult.get().trim();
+                    command = PrikazGiveItem.NAZEV + " " + itemName + " " + targetNpc.getName();
+                } else {
+                    // Handle empty or canceled input
+                    return;
+                }
+            } else {
+                // Handle unexpected choice
+                return;
+            }
+
+            processCommand(command);
+            updateNpcList();
+            updateInventory();
+        }
+    }
+
 
     /**
      * Registers an observer for changes in the game state within the current location.
