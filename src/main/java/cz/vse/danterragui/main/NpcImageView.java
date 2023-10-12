@@ -14,7 +14,9 @@ public class NpcImageView extends ImageView {
         setNpcImages();
     }
     private Map<String, Image> npcImages = new HashMap<>();
-
+    /**
+     * Matches each "Npc from the game with its personal image
+     */
     private void setNpcImages(){
         npcImages.put("aiba", new Image(getClass().getResource("Npcs/Aiba.jpg").toExternalForm()));
         npcImages.put("ghost", new Image(getClass().getResource("Npcs/Ghost.jpg").toExternalForm()));

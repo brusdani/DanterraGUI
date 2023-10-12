@@ -396,6 +396,11 @@ public class HomeController{
         answerOutput.clear();
         roomNpcs.clear();
     }
+
+    /**
+     * Opens help for the player in a webView
+     * @param event player's click on help button
+     */
     @FXML
     private void helpClick(ActionEvent event){
         Stage helpStage = new Stage();
@@ -406,7 +411,9 @@ public class HomeController{
         helpStage.show();
     }
 
-
+    /**
+     * Updates contents of exit panel in case the current room was scanned
+     */
     public void updateExitPanel() {
         if (hra.getHerniPlan().getAktualniProstor().isWasScanned()){
             updateExitList();
@@ -414,6 +421,11 @@ public class HomeController{
             exitList.clear();
         }
     }
+
+    /**
+     * Makes travelling between rooms possible on mouse click
+     * @param mouseEvent click on Exit panel
+     */
     @FXML
     private void clickExitPanel(MouseEvent mouseEvent){
         Prostor destination = exitPanel.getSelectionModel().getSelectedItem();
@@ -441,6 +453,11 @@ public class HomeController{
         roomPanel.refresh();
 
     }
+
+    /**
+     * Allows players to pickup room contents by clicking on them
+     * @param mouseEvent click on Thing list cell in roomContents
+     */
     @FXML
     private void clickRoomContents(MouseEvent mouseEvent){
         Thing targetItem = roomPanel.getSelectionModel().getSelectedItem();
@@ -452,6 +469,11 @@ public class HomeController{
         inventoryPanel.refresh();
         roomPanel.refresh();
     }
+
+    /**
+     * Allows players to talkTo NPCs by clicking on npc panel
+     * @param mouseEvent click on npcListCell
+     */
     @FXML
     private void clickNpcPanel(MouseEvent mouseEvent){
         Npc targetNpc = npcPanel.getSelectionModel().getSelectedItem();
@@ -461,6 +483,12 @@ public class HomeController{
         updateNpcList();
         npcPanel.refresh();
     }
+
+    /**
+     * Gives players opportunity to interact with items in inventory
+     * Shows pop up that gives an option to drop or use an item
+     * @param mouseEvent click in item in the inventory
+     */
     @FXML
     private void showUseOrDropPopup(MouseEvent mouseEvent) {
         Thing targetItem = inventoryPanel.getSelectionModel().getSelectedItem();
@@ -494,6 +522,14 @@ public class HomeController{
             roomPanel.refresh();
         }
     }
+
+    /**
+     * Registers an observer for changes in the game state within the current location.
+     * This method registers an observer to monitor changes in the game state, specifically the state of the current
+     * location (prostor). When the game state changes, this observer is triggered, and it updates various elements in
+     * the user interface to reflect those changes. The elements updated include the exit panel, room contents, riddles,
+     * and the list of non-playable characters (NPCs).
+     */
     private void registerStavHryObserver() {
         hra.getHerniPlan().getAktualniProstor().registruj(ZmenaHry.STAV_PROSTORU, () -> {
             updateExitPanel();

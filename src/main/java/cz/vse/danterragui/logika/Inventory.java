@@ -10,7 +10,7 @@ import java.util.*;
  * Class Inventory - Represents player's inventory
  * Allows players to carry Things with them
  * @author Daniel Brus
- * @version 0.9, May 2023
+ * @version 0.9, October 2023
  */
 
 public class Inventory implements PredmetPozorovani {
@@ -19,6 +19,10 @@ public class Inventory implements PredmetPozorovani {
     private Map<ZmenaHry, Set<Pozorovatel>> seznamPozorovatelu = new HashMap<>();
     private int capacity = 10;
 
+    /**
+     * Constructor
+     * @param items HashMap key - string, value - Thing object
+     */
     public Inventory(HashMap<String, Thing> items) {
         this.items = items;
         for(ZmenaHry zmenaHry : ZmenaHry.values()){
@@ -139,6 +143,10 @@ public class Inventory implements PredmetPozorovani {
     public void registruj(ZmenaHry zmenaHry, Pozorovatel pozorovatel){
         seznamPozorovatelu.get(zmenaHry).add(pozorovatel);
     }
+    /**
+     * * Registers an observer (Pozorovatel) for a specific game state change (ZmenaHry).
+     * @param zmenaHry The type of game change
+     */
     private void upozorniPozorovatele(ZmenaHry zmenaHry){
         for(Pozorovatel pozorovatel: seznamPozorovatelu.get(zmenaHry)){
             pozorovatel.aktualizuj();

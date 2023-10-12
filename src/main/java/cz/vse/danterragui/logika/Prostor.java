@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
  * @author Michael Kolling, Lubos Pavlicek, Jarmila Pavlickova
  * @version pro školní rok 2016/2017
  *
- * Updated in May 2023
+ * Updated in October 2023
  * @author Daniel Brus
  */
 public class Prostor implements PredmetPozorovani {
@@ -421,17 +421,30 @@ public class Prostor implements PredmetPozorovani {
         return Collections.unmodifiableCollection(vychody);
     }
 
+    /**
+     * Retrieves a list of all Things in the current context or collection.
+     * @return A List of Thing objects representing all the items in the current context or collection.
+     */
     public List<Thing> getThings() {
         List<Thing> itemList = new ArrayList<>();
         itemList.addAll(things.values());
         return itemList;
     }
+    /**
+     * Retrieves a list of all Npc objects in the current context or collection.
+     * @return A List of Npc objects representing all the items in the current context or collection.
+     */
     public List<Npc> getNpcs(){
         List<Npc> npcList = new ArrayList<>();
         npcList.addAll(npcs.values());
         return npcList;
     }
 
+    /**
+     * * Registers an observer (Pozorovatel) for a specific game state change (ZmenaHry).
+     * @param zmenaHry The type of game change
+     * @param pozorovatel The observer to be registered for notifications
+     */
     @Override
     public void registruj(ZmenaHry zmenaHry, Pozorovatel pozorovatel) {
         seznamPozorovatelu.get(zmenaHry).add(pozorovatel);
