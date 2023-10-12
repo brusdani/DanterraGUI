@@ -43,6 +43,8 @@ public class HomeController{
     @FXML
     private ImageView player;
     @FXML
+    private ImageView minimap;
+    @FXML
     private ListView<Thing> inventoryPanel;
     @FXML
     private Label npcLabel;
@@ -99,6 +101,7 @@ public class HomeController{
             updateNpcList();
             updateRiddle();
             updateRoomContents();
+            updateMinimap();
             registerStavHryObserver();
         });
         hra.getInventory().registruj(ZmenaHry.STAV_INVENTARE, () -> {
@@ -127,7 +130,10 @@ public class HomeController{
         roomCoordinates.put("cliffs", new Point2D(144,224));
         roomCoordinates.put("village", new Point2D(230,58));
         roomCoordinates.put("pub", new Point2D(300,56));
-        roomCoordinates.put("mare_lamentorum", new Point2D(323,151));
+        roomCoordinates.put("mare_lamentorum", new Point2D(250,151));
+        roomCoordinates.put("ruins", new Point2D(135,151));
+        roomCoordinates.put("monaxia", new Point2D(15,145));
+        roomCoordinates.put("babel", new Point2D(135,54));
     }
 
     /**
@@ -207,6 +213,12 @@ public class HomeController{
         String prostor = hra.getHerniPlan().getAktualniProstor().getNazev();
         player.setLayoutX(roomCoordinates.get(prostor).getX());
         player.setLayoutY(roomCoordinates.get(prostor).getY());
+    }
+    @FXML
+    private void updateMinimap(){
+        if (hra.getHerniPlan().getAktualniProstor().getNazev().equals("mare_lamentorum")){
+            minimap.setImage(new Image(getClass().getResource("HerniPlan/DanterraMap2.jpg").toExternalForm()));
+        }
     }
 
     /**
