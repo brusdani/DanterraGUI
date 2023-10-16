@@ -2,6 +2,9 @@ package cz.vse.danterragui.main;
 
 import cz.vse.danterragui.logika.*;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -27,7 +30,7 @@ import java.util.Optional;
  * @version 1.0 , October 2023
  */
 
-public class HomeController{
+public class HomeController {
     @FXML
     private TextField playerInput;
     @FXML
@@ -63,7 +66,12 @@ public class HomeController{
     @FXML
     private Button okButton;
     @FXML
+    private Button sailButton;
+    @FXML
+    private Button fireIVButton;
+    @FXML
     private TabPane tabPane;
+    private BooleanProperty isButtonVisible = new SimpleBooleanProperty(false);
 
     private IHra hra = new Hra();
 
@@ -79,15 +87,16 @@ public class HomeController{
     private Map<String, Point2D> roomCoordinates = new HashMap<>();
 
     private Image aibaImage = new Image("file:///C:/Users/Daniel/Pictures/Danterra_Pictures/Aiba.jpg");
+
     /**
      * Initializes the controller and sets up the initial game state.
      * Called when the FXML file is loaded.
      */
     @FXML
-    private void initialize(){
-        textAreaOutput.appendText(hra.vratUvitani()+"\n");
-        textAreaOutput.appendText(hra.poem()+"\n");
-        textAreaOutput.appendText(hra.intro()+"\n");
+    private void initialize() {
+        textAreaOutput.appendText(hra.vratUvitani() + "\n");
+        textAreaOutput.appendText(hra.poem() + "\n");
+        textAreaOutput.appendText(hra.intro() + "\n");
         Platform.runLater(() -> playerInput.requestFocus());
         exitPanel.setItems(exitList);
         inventoryPanel.setItems(inventory);
@@ -95,51 +104,57 @@ public class HomeController{
         npcPanel.setItems(roomNpcs);
         setPlayerStartingLocation();
         registerStavHryObserver();
-        hra.getHerniPlan().registruj(ZmenaHry.ZMENA_MISTNOSTI,() -> {
+        hra.getHerniPlan().registruj(ZmenaHry.ZMENA_MISTNOSTI, () -> {
             updateExitPanel();
             updatePlayerLocation();
             updateNpcList();
             updateRiddle();
             updateRoomContents();
             updateMinimap();
+            makeSailButtonVisible();
             registerStavHryObserver();
+            makeFireIVButtonVisible();
         });
         hra.getInventory().registruj(ZmenaHry.STAV_INVENTARE, () -> {
             updateInventory();
             updateRoomContents();
+            makeSailButtonVisible();
+            makeFireIVButtonVisible();
         });
         hra.registruj(ZmenaHry.KONEC_HRY, () -> updateGameEnding());
+        resetMinimap();
         setRoomCoordinates();
         exitPanel.setCellFactory(param -> new ListCellProstor());
         inventoryPanel.setCellFactory(param -> new ListCellThing());
         roomPanel.setCellFactory(param -> new ListCellThing());
         npcPanel.setCellFactory(param -> new ListCellNpc());
-
+        showInvisibleButton();
+        makeFireIVButtonVisible();
     }
 
     /**
      * Sets coordinates for each room in the minimap
      */
     private void setRoomCoordinates() {
-        roomCoordinates.put("hall", new Point2D(125,145));
-        roomCoordinates.put("cellar", new Point2D(127,59));
-        roomCoordinates.put("tower", new Point2D(23,145));
-        roomCoordinates.put("treasure_room", new Point2D(14,64));
-        roomCoordinates.put("gate", new Point2D(229,134));
-        roomCoordinates.put("forest", new Point2D(231,217));
-        roomCoordinates.put("cliffs", new Point2D(144,224));
-        roomCoordinates.put("village", new Point2D(230,58));
-        roomCoordinates.put("pub", new Point2D(300,56));
-        roomCoordinates.put("mare_lamentorum", new Point2D(250,151));
-        roomCoordinates.put("ruins", new Point2D(135,151));
-        roomCoordinates.put("monaxia", new Point2D(15,145));
-        roomCoordinates.put("babel", new Point2D(135,54));
+        roomCoordinates.put("hall", new Point2D(125, 145));
+        roomCoordinates.put("cellar", new Point2D(127, 59));
+        roomCoordinates.put("tower", new Point2D(23, 145));
+        roomCoordinates.put("treasure_room", new Point2D(14, 64));
+        roomCoordinates.put("gate", new Point2D(229, 134));
+        roomCoordinates.put("forest", new Point2D(231, 217));
+        roomCoordinates.put("cliffs", new Point2D(144, 224));
+        roomCoordinates.put("village", new Point2D(230, 58));
+        roomCoordinates.put("pub", new Point2D(300, 56));
+        roomCoordinates.put("mare_lamentorum", new Point2D(250, 151));
+        roomCoordinates.put("ruins", new Point2D(135, 151));
+        roomCoordinates.put("monaxia", new Point2D(15, 145));
+        roomCoordinates.put("babel", new Point2D(135, 54));
     }
 
     /**
      * Sets starting coordinates for the player on the minimap
      */
-    private void setPlayerStartingLocation(){
+    private void setPlayerStartingLocation() {
         player.setLayoutX(127);
         player.setLayoutY(59);
     }
@@ -149,7 +164,7 @@ public class HomeController{
      * Called every time player changes (scanned) rooms
      */
     @FXML
-    private void updateExitList(){
+    private void updateExitList() {
         exitList.clear();
         exitList.addAll(hra.getHerniPlan().getAktualniProstor().getVychody());
     }
@@ -170,9 +185,9 @@ public class HomeController{
      * gets picked up or is dropped
      */
     @FXML
-    private void updateRoomContents(){
+    private void updateRoomContents() {
         roomContents.clear();
-        if(hra.getHerniPlan().getAktualniProstor().isWasScanned()) {
+        if (hra.getHerniPlan().getAktualniProstor().isWasScanned()) {
             roomContents.addAll(hra.getHerniPlan().getAktualniProstor().getThings());
         }
     }
@@ -183,9 +198,9 @@ public class HomeController{
      * was talked to
      */
     @FXML
-    private void updateNpcList(){
+    private void updateNpcList() {
         roomNpcs.clear();
-        if(hra.getHerniPlan().getAktualniProstor().isWasScanned()) {
+        if (hra.getHerniPlan().getAktualniProstor().isWasScanned()) {
             roomNpcs.addAll(hra.getHerniPlan().getAktualniProstor().getNpcs());
         }
     }
@@ -195,9 +210,9 @@ public class HomeController{
      * called every time riddle is solved or player changes the room
      */
     @FXML
-    private void updateRiddle(){
+    private void updateRiddle() {
         answerOutput.clear();
-        if(hra.getHerniPlan().getAktualniProstor().isWasScanned()) {
+        if (hra.getHerniPlan().getAktualniProstor().isWasScanned()) {
             if (hra.getHerniPlan().getAktualniProstor().getRiddle() != null) {
                 answerOutput.setText(hra.getHerniPlan().getAktualniProstor().getRiddle().getRiddle());
             } else {
@@ -209,36 +224,42 @@ public class HomeController{
     /**
      * Updates player location every time player changes location
      */
-    private void updatePlayerLocation(){
+    private void updatePlayerLocation() {
         String prostor = hra.getHerniPlan().getAktualniProstor().getNazev();
         player.setLayoutX(roomCoordinates.get(prostor).getX());
         player.setLayoutY(roomCoordinates.get(prostor).getY());
     }
+
     @FXML
-    private void updateMinimap(){
-        if (hra.getHerniPlan().getAktualniProstor().getNazev().equals("mare_lamentorum")){
+    private void updateMinimap() {
+        if (hra.getHerniPlan().getAktualniProstor().getNazev().equals("mare_lamentorum")) {
             minimap.setImage(new Image(getClass().getResource("HerniPlan/DanterraMap2.jpg").toExternalForm()));
         }
+    }
+    @FXML
+    private void resetMinimap(){
+        minimap.setImage(new Image(getClass().getResource("HerniPlan/DanterraMap1.jpg").toExternalForm()));
     }
 
     /**
      * Reads player's input. Clears the input field
+     *
      * @param event - Player presses enter or clicks enter button
      */
     @FXML
-    private void onEnterButtonClick(ActionEvent event){
+    private void onEnterButtonClick(ActionEvent event) {
         String command = playerInput.getText();
         playerInput.clear();
         processCommand(command);
         //updateInventory();
-        if (hra.getHerniPlan().getAktualniProstor().isWasScanned()){
+        if (hra.getHerniPlan().getAktualniProstor().isWasScanned()) {
             //updateRoomContents();
             //updateRiddle();
             //updateNpcList();
-        } else {
-            roomContents.clear();
-            answerOutput.clear();
-            roomNpcs.clear();
+            //} else {
+            //roomContents.clear();
+            //answerOutput.clear();
+            //roomNpcs.clear();
         }
         //hra.getHerniPlan().getAktualniProstor().registruj(ZmenaHry.STAV_HRY,() -> aktualizuj());
         exitPanel.refresh();
@@ -248,10 +269,11 @@ public class HomeController{
 
     /**
      * Handles answer input
+     *
      * @param event - Click on answer button
      */
     @FXML
-    private void onAnswerButtonClick(ActionEvent event){
+    private void onAnswerButtonClick(ActionEvent event) {
         String playerAnswer = "answer " + answerInput.getText();
         //String answer = answerInput.getText();
         answerInput.clear();
@@ -268,10 +290,11 @@ public class HomeController{
 
     /**
      * Handles player calling Aiba and room scans
+     *
      * @param event - click on Aiba button
      */
     @FXML
-    private void onAibaButtonClick(ActionEvent event){
+    private void onAibaButtonClick(ActionEvent event) {
         if (!hra.getAiba().isSummoned()) {
             String command = PrikazCallAiba.NAZEV;
             processCommand(command);
@@ -288,6 +311,7 @@ public class HomeController{
 
     /**
      * Clears character dialogue window
+     *
      * @param event - click on "OK" button
      */
     @FXML
@@ -300,15 +324,16 @@ public class HomeController{
     /**
      * processes user commands and appends result to text area
      * and npc dialogue area
+     *
      * @param command String - player's command that'll be executed
      */
 
     private void processCommand(String command) {
-        textAreaOutput.appendText(">"+ command + "\n");
+        textAreaOutput.appendText(">" + command + "\n");
         String result = hra.zpracujPrikaz(command);
-        if(command.equals("sail")){
+        if (command.equals("sail") || command.equals("fireIV")) {
             npcDialogue.clear();
-            textAreaOutput.appendText(result+"\n");
+            textAreaOutput.appendText(result + "\n");
         } else {
             npcDialogue.clear();
             npcDialogue.appendText(result);
@@ -323,12 +348,13 @@ public class HomeController{
 
     /**
      * Handles interaction with NPCs
-     * @param command - player's command
-     * @param result - Result of the command
+     *
+     * @param command   - player's command
+     * @param result    - Result of the command
      * @param imageView - NPC image
      */
 
-    private void handleNpcDialogue(String command, String result, ImageView imageView){
+    private void handleNpcDialogue(String command, String result, ImageView imageView) {
         if (command.startsWith("talkTo")) {
             String npcName = command.substring("talkTo ".length());
             Image npcImage = npcImageView.getImage(npcName);
@@ -350,7 +376,7 @@ public class HomeController{
      * Sets a game ending graphics when the game is over
      */
     private void updateGameEnding() {
-        if(hra.konecHry()){
+        if (hra.konecHry()) {
             textAreaOutput.appendText(hra.ending());
             textAreaOutput.appendText(hra.vratEpilog());
             playerInput.setDisable(true);
@@ -363,12 +389,13 @@ public class HomeController{
 
     /**
      * Terminatest game
+     *
      * @param event - player confirms they're sure to quit the game
      */
     @FXML
-    public void terminateGame(ActionEvent event){
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION,"Are you sure you want to quit the game?");
-        Optional <ButtonType> result = alert.showAndWait();
+    public void terminateGame(ActionEvent event) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to quit the game?");
+        Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             Platform.exit();
         }
@@ -376,12 +403,13 @@ public class HomeController{
 
     /**
      * Starts a new game
+     *
      * @param event - player clicks on new game button
      */
     @FXML
-    public void newGame(ActionEvent event){
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION,"Are you sure you want to restart the game?");
-        Optional <ButtonType> result = alert.showAndWait();
+    public void newGame(ActionEvent event) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to restart the game?");
+        Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             clearEverything();
             hra = new Hra();
@@ -397,7 +425,7 @@ public class HomeController{
     /**
      * Clears every piece of UI when the game restarts
      */
-    public void clearEverything(){
+    public void clearEverything() {
         textAreaOutput.clear();
         npcDialogue.clear();
         npcImage.setImage(null);
@@ -411,10 +439,11 @@ public class HomeController{
 
     /**
      * Opens help for the player in a webView
+     *
      * @param event player's click on help button
      */
     @FXML
-    private void helpClick(ActionEvent event){
+    private void helpClick(ActionEvent event) {
         Stage helpStage = new Stage();
         WebView webView = new WebView();
         Scene helpScene = new Scene(webView);
@@ -427,7 +456,7 @@ public class HomeController{
      * Updates contents of exit panel in case the current room was scanned
      */
     public void updateExitPanel() {
-        if (hra.getHerniPlan().getAktualniProstor().isWasScanned()){
+        if (hra.getHerniPlan().getAktualniProstor().isWasScanned()) {
             updateExitList();
         } else {
             exitList.clear();
@@ -436,13 +465,14 @@ public class HomeController{
 
     /**
      * Makes travelling between rooms possible on mouse click
+     *
      * @param mouseEvent click on Exit panel
      */
     @FXML
-    private void clickExitPanel(MouseEvent mouseEvent){
+    private void clickExitPanel(MouseEvent mouseEvent) {
         Prostor destination = exitPanel.getSelectionModel().getSelectedItem();
         if (destination == null) return;
-        if(destination.isLocked()){
+        if (destination.isLocked()) {
             String destinationString = destination.toString().replace("(Locked)", "");
             String command = PrikazUnlock.NAZEV + " " + destinationString;
             processCommand(command);
@@ -453,12 +483,12 @@ public class HomeController{
         String command = PrikazJdi.NAZEV + " " + destination;
         processCommand(command);
         //if (hra.getHerniPlan().getAktualniProstor().isWasScanned()){
-            //updateRoomContents();
-            //updateRiddle();
+        //updateRoomContents();
+        //updateRiddle();
         //} else {
-            //roomContents.clear();
-            //answerOutput.clear();
-            //roomNpcs.clear();
+        //roomContents.clear();
+        //answerOutput.clear();
+        //roomNpcs.clear();
         //}
         //hra.getHerniPlan().getAktualniProstor().registruj(ZmenaHry.STAV_INVENTARE,() -> aktualizuj());
         exitPanel.refresh();
@@ -468,10 +498,11 @@ public class HomeController{
 
     /**
      * Allows players to pickup room contents by clicking on them
+     *
      * @param mouseEvent click on Thing list cell in roomContents
      */
     @FXML
-    private void clickRoomContents(MouseEvent mouseEvent){
+    private void clickRoomContents(MouseEvent mouseEvent) {
         Thing targetItem = roomPanel.getSelectionModel().getSelectedItem();
         if (targetItem == null) return;
         String command = PrikazPickup.NAZEV + " " + targetItem;
@@ -499,6 +530,7 @@ public class HomeController{
     /**
      * Gives players opportunity to interact with items in inventory
      * Shows pop up that gives an option to drop or use an item
+     *
      * @param mouseEvent click in item in the inventory
      */
     @FXML
@@ -594,5 +626,45 @@ public class HomeController{
             updateRiddle();
             updateNpcList();
         });
+    }
+    @FXML
+    private void onSailButtonClick() {
+        String command = PrikazSail.NAZEV;
+        processCommand(command);
+        setButtonVisibility(false);
+    }
+    @FXML
+    private void onFireIVButtonClick(){
+        String command = PrikazFireIV.NAZEV;
+        processCommand(command);
+        setButtonVisibility(false);
+    }
+
+    public void makeSailButtonVisible() {
+        if (hra.getHerniPlan().getAktualniProstor().getNazev().equals("pub") && hra.getInventory().containsItem("ticket")) {
+            setButtonVisibility(true);
+            showInvisibleButton();
+        }else {
+            setButtonVisibility(false);
+            showInvisibleButton();
+        }
+    }
+    public void makeFireIVButtonVisible() {
+        if (hra.getHerniPlan().getAktualniProstor().getNazev().equals("monaxia") && hra.getInventory().containsItem("magicRod_u")) {
+            fireIVButton.setVisible(true);
+            showInvisibleButton();
+        } else {
+            fireIVButton.setVisible(false);
+            showInvisibleButton();
+        }
+    }
+
+
+    public void setButtonVisibility(boolean isVisible) {
+        isButtonVisible.set(isVisible);
+    }
+
+    private void showInvisibleButton() {
+        sailButton.visibleProperty().bind(Bindings.when(isButtonVisible).then(true).otherwise(false));
     }
 }

@@ -9,7 +9,7 @@ package cz.vse.danterragui.logika;
  */
 
 public class PrikazSail implements IPrikaz {
-    private static final String NAZEV = "sail";
+    public static final String NAZEV = "sail";
 
     private final HerniPlan herniPlan;
     private Inventory inventory;

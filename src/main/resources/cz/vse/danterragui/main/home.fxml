@@ -49,6 +49,8 @@
                   <Label fx:id="npcLabel" alignment="CENTER" layoutX="14.0" layoutY="143.0" prefHeight="18.0" prefWidth="94.0" />
                   <Button fx:id="aibaButton" layoutX="222.0" layoutY="43.0" mnemonicParsing="false" onAction="#onAibaButtonClick" prefHeight="96.0" prefWidth="137.0" text="CallAiba" />
                   <Button fx:id="okButton" layoutX="449.0" layoutY="139.0" mnemonicParsing="false" onAction="#onOkButtonClick" prefHeight="26.0" prefWidth="51.0" text="Ok" />
+                  <Button fx:id="sailButton" layoutX="368.0" layoutY="43.0" mnemonicParsing="false" onAction="#onSailButtonClick" prefHeight="26.0" prefWidth="42.0" text="Sail" />
+                  <Button fx:id="fireIVButton" layoutX="368.0" layoutY="78.0" mnemonicParsing="false" onAction="#onFireIVButtonClick" prefHeight="26.0" prefWidth="51.0" text="FireIV" />
                </children>
             </AnchorPane>
          </children>
@@ -67,7 +69,7 @@
                                     <Image url="@HerniPlan/DanterraMap1.jpg" />
                                  </image>
                               </ImageView>
-                              <ImageView fx:id="player" fitHeight="34.0" fitWidth="42.0" layoutX="125.0" layoutY="57.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fx:id="player" fitHeight="34.0" fitWidth="42.0" layoutX="126.0" layoutY="57.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@Player/Player2.jpg" />
                                  </image>
