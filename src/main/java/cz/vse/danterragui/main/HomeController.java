@@ -342,7 +342,7 @@ public class HomeController {
                 npcLabel.setText("Aiba");
             }
             handleNpcDialogue(command, result, npcImage);
-            updateGameEnding();
+            //updateGameEnding();
         }
     }
 
@@ -378,6 +378,7 @@ public class HomeController {
     private void updateGameEnding() {
         if (hra.konecHry()) {
             textAreaOutput.appendText(hra.ending());
+            textAreaOutput.appendText(hra.playerEnding());
             textAreaOutput.appendText(hra.vratEpilog());
             playerInput.setDisable(true);
             enterButton.setDisable(true);
@@ -388,7 +389,7 @@ public class HomeController {
     }
 
     /**
-     * Terminatest game
+     * Terminates game
      *
      * @param event - player confirms they're sure to quit the game
      */
