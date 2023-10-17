@@ -6,7 +6,7 @@
 
   <groupId>cz.vse</groupId>
   <artifactId>DanterraGUI</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0.0</version>
   <name>DanterraGUI</name>
 
   <properties>
@@ -65,9 +65,9 @@
             <id>default-cli</id>
             <configuration>
               <mainClass>cz.vse.danterragui/cz.vse.danterragui.main.Start</mainClass>
-              <launcher>app</launcher>
-              <jlinkZipName>app</jlinkZipName>
-              <jlinkImageName>app</jlinkImageName>
+              <launcher>${project.artifactId}</launcher>
+              <jlinkZipName>${project.artifactId}-${project.version}</jlinkZipName>
+              <jlinkImageName>${project.artifactId}</jlinkImageName>
               <noManPages>true</noManPages>
               <stripDebug>true</stripDebug>
               <noHeaderFiles>true</noHeaderFiles>
