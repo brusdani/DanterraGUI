@@ -10,7 +10,7 @@ package cz.vse.danterragui.logika;
 
 
 public class PrikazFireIV implements  IPrikaz{
-    private static final String NAZEV = "fireIV";
+    public static final String NAZEV = "fireIV";
 
     private final HerniPlan herniPlan;
     private Inventory inventory;

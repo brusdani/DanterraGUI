@@ -37,7 +37,7 @@ public class Hra implements IHra {
      */
     public Hra() {
         herniPlan = new HerniPlan();
-        inventory = new Inventory();
+        inventory = new Inventory(new HashMap<>());
         aiba = new Aiba(false);
         ending = new Ending(inventory);
         platnePrikazy = new SeznamPrikazu();

@@ -65,6 +65,7 @@ public class PrikazAnswer implements IPrikaz {
         }
         inventory.removeRealItem(riddle.getHint());
         inventory.addThing(riddle.getReward());
+        location.setRiddle(null);
         location.setHasRiddle(false);
         return "You solved the riddle and received " + riddle.getReward();
 
