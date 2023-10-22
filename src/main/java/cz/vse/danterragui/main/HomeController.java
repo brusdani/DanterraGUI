@@ -380,6 +380,8 @@ public class HomeController {
             textAreaOutput.appendText(hra.ending());
             textAreaOutput.appendText(hra.playerEnding());
             textAreaOutput.appendText(hra.vratEpilog());
+            inventoryPanel.setDisable(true);
+            aibaButton.setDisable(true);
             playerInput.setDisable(true);
             enterButton.setDisable(true);
             exitPanel.setDisable(true);
@@ -420,6 +422,8 @@ public class HomeController {
             enterButton.setDisable(false);
             exitPanel.setDisable(false);
             tabPane.setDisable(false);
+            aibaButton.setDisable(false);
+            inventoryPanel.setDisable(false);
         }
     }
 
