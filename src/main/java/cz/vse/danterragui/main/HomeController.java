@@ -382,8 +382,11 @@ public class HomeController {
             textAreaOutput.appendText(hra.vratEpilog());
             playerInput.setDisable(true);
             enterButton.setDisable(true);
+            aibaButton.setDisable(true);
             exitPanel.setDisable(true);
             tabPane.setDisable(true);
+            inventoryPanel.setDisable(true);
+            okButton.setDisable(true);
 
         }
     }
@@ -394,7 +397,7 @@ public class HomeController {
      * @param event - player confirms they're sure to quit the game
      */
     @FXML
-    public void terminateGame(ActionEvent event) {
+    private void terminateGame(ActionEvent event) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to quit the game?");
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
@@ -408,7 +411,7 @@ public class HomeController {
      * @param event - player clicks on new game button
      */
     @FXML
-    public void newGame(ActionEvent event) {
+    private void newGame(ActionEvent event) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to restart the game?");
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
@@ -420,13 +423,17 @@ public class HomeController {
             enterButton.setDisable(false);
             exitPanel.setDisable(false);
             tabPane.setDisable(false);
+            aibaButton.setDisable(false);
+            inventoryPanel.setDisable(false);
+            okButton.setDisable(false);
         }
     }
 
     /**
      * Clears every piece of UI when the game restarts
      */
-    public void clearEverything() {
+    @FXML
+    private void clearEverything() {
         textAreaOutput.clear();
         npcDialogue.clear();
         npcImage.setImage(null);
@@ -456,7 +463,8 @@ public class HomeController {
     /**
      * Updates contents of exit panel in case the current room was scanned
      */
-    public void updateExitPanel() {
+    @FXML
+    private void updateExitPanel() {
         if (hra.getHerniPlan().getAktualniProstor().isWasScanned()) {
             updateExitList();
         } else {
@@ -567,7 +575,11 @@ public class HomeController {
             roomPanel.refresh();
         }
     }
-
+    /**
+     * Allows players to interact NPCs by clicking on npc panel
+     * Shows pop up that gives an option to talkTo npc or to giveItem to npc
+     * @param mouseEvent click on npcListCell
+     */
     @FXML
     private void clickNpcPanel(MouseEvent mouseEvent) {
         Npc targetNpc = npcPanel.getSelectionModel().getSelectedItem();
@@ -628,19 +640,28 @@ public class HomeController {
             updateNpcList();
         });
     }
+
+    /**
+     * Executes sail command when sail button is clicked on, making button invisible after
+     */
     @FXML
     private void onSailButtonClick() {
         String command = PrikazSail.NAZEV;
         processCommand(command);
         setButtonVisibility(false);
     }
+    /**
+     * Executes fireIV command when sail button is clicked on, making button invisible after
+     */
     @FXML
     private void onFireIVButtonClick(){
         String command = PrikazFireIV.NAZEV;
         processCommand(command);
         setButtonVisibility(false);
     }
-
+    /**
+     * Sail button is visible only if certain conditions are met
+     */
     public void makeSailButtonVisible() {
         if (hra.getHerniPlan().getAktualniProstor().getNazev().equals("pub") && hra.getInventory().containsItem("ticket")) {
             setButtonVisibility(true);
@@ -650,6 +671,9 @@ public class HomeController {
             showInvisibleButton();
         }
     }
+    /**
+     * FireIV button is visible only if certain conditions are met
+     */
     public void makeFireIVButtonVisible() {
         if (hra.getHerniPlan().getAktualniProstor().getNazev().equals("monaxia") && hra.getInventory().containsItem("magicRod_u")) {
             fireIVButton.setVisible(true);
@@ -660,11 +684,17 @@ public class HomeController {
         }
     }
 
-
+    /**
+     * Setter for button visibility
+     */
     public void setButtonVisibility(boolean isVisible) {
         isButtonVisible.set(isVisible);
     }
-
+    /**
+     * Shows an invisible button based on a conditional property.
+     * This method binds the visibility of the "sailButton" to a condition defined by "isButtonVisible".
+     * If the condition is met (true), the button is set to visible, otherwise, it's set to invisible.
+     */
     private void showInvisibleButton() {
         sailButton.visibleProperty().bind(Bindings.when(isButtonVisible).then(true).otherwise(false));
     }
