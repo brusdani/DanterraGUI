@@ -37,6 +37,10 @@ public class ListCellProstor extends ListCell<Prostor> {
         roomImages.put("cliffs",new Image(getClass().getResource("Prostory/Cliffs.jpg").toExternalForm()));
         roomImages.put("village",new Image(getClass().getResource("Prostory/Village.jpg").toExternalForm()));
         roomImages.put("pub",new Image(getClass().getResource("Prostory/Pub.jpg").toExternalForm()));
+        roomImages.put("mare_lamentorum",new Image(getClass().getResource("Prostory/MareLamentorum.png").toExternalForm()));
+        roomImages.put("ruins",new Image(getClass().getResource("Prostory/Ruins.jpg").toExternalForm()));
+        roomImages.put("monaxia",new Image(getClass().getResource("Prostory/Monaxia.jpg").toExternalForm()));
+        roomImages.put("babel",new Image(getClass().getResource("Prostory/Babel.jpg").toExternalForm()));
     }
     /**
      * Updates list cell in ListView

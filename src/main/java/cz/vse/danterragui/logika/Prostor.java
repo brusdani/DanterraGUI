@@ -146,7 +146,7 @@ public class Prostor implements PredmetPozorovani {
     }
 
     private void notifyObserver(ZmenaHry zmenaHry) {
-        System.out.println("Observer notified");
+        //System.out.println("Observer notified");
         for(Pozorovatel pozorovatel : seznamPozorovatelu.get(zmenaHry)) {
             pozorovatel.aktualizuj();
         }
