@@ -386,7 +386,7 @@ public class HomeController {
             enterButton.setDisable(true);
             exitPanel.setDisable(true);
             tabPane.setDisable(true);
-
+            okButton.setDisable(true);
         }
     }
 
@@ -424,13 +424,15 @@ public class HomeController {
             tabPane.setDisable(false);
             aibaButton.setDisable(false);
             inventoryPanel.setDisable(false);
+            okButton.setDisable(false);
         }
     }
 
     /**
      * Clears every piece of UI when the game restarts
      */
-    public void clearEverything() {
+    @FXML
+    private void clearEverything() {
         textAreaOutput.clear();
         npcDialogue.clear();
         npcImage.setImage(null);
@@ -571,7 +573,13 @@ public class HomeController {
             roomPanel.refresh();
         }
     }
-
+    /**
+     * Handles the click event on the NPC panel. This method allows the player to interact with an NPC
+     * by presenting a dialog with options.
+     * Depending on the player's choice, the appropriate action is executed.
+     *
+     * @param mouseEvent The MouseEvent representing the click event.
+     */
     @FXML
     private void clickNpcPanel(MouseEvent mouseEvent) {
         Npc targetNpc = npcPanel.getSelectionModel().getSelectedItem();
@@ -602,11 +610,9 @@ public class HomeController {
                     String itemName = itemResult.get().trim();
                     command = PrikazGiveItem.NAZEV + " " + itemName + " " + targetNpc.getName();
                 } else {
-                    // Handle empty or canceled input
                     return;
                 }
             } else {
-                // Handle unexpected choice
                 return;
             }
 
@@ -616,7 +622,6 @@ public class HomeController {
         }
     }
 
-
     /**
      * Registers an observer for changes in the game state within the current location.
      * This method registers an observer to monitor changes in the game state, specifically the state of the current
@@ -624,6 +629,7 @@ public class HomeController {
      * the user interface to reflect those changes. The elements updated include the exit panel, room contents, riddles,
      * and the list of non-playable characters (NPCs).
      */
+    @FXML
     private void registerStavHryObserver() {
         hra.getHerniPlan().getAktualniProstor().registruj(ZmenaHry.STAV_PROSTORU, () -> {
             updateExitPanel();
@@ -645,7 +651,8 @@ public class HomeController {
         setButtonVisibility(false);
     }
 
-    public void makeSailButtonVisible() {
+    @FXML
+    private void makeSailButtonVisible() {
         if (hra.getHerniPlan().getAktualniProstor().getNazev().equals("pub") && hra.getInventory().containsItem("ticket")) {
             setButtonVisibility(true);
             showInvisibleButton();
@@ -654,7 +661,8 @@ public class HomeController {
             showInvisibleButton();
         }
     }
-    public void makeFireIVButtonVisible() {
+    @FXML
+    private void makeFireIVButtonVisible() {
         if (hra.getHerniPlan().getAktualniProstor().getNazev().equals("monaxia") && hra.getInventory().containsItem("magicRod_u")) {
             fireIVButton.setVisible(true);
             showInvisibleButton();
@@ -663,9 +671,8 @@ public class HomeController {
             showInvisibleButton();
         }
     }
-
-
-    public void setButtonVisibility(boolean isVisible) {
+    @FXML
+    private void setButtonVisibility(boolean isVisible) {
         isButtonVisible.set(isVisible);
     }
 
