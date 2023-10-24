@@ -45,6 +45,7 @@ public class ListCellThing extends ListCell<Thing> {
         thingImages.put("memberberries", new Image(getClass().getResource("Things/Memberberry.jpg").toExternalForm()));
         thingImages.put("throne", new Image(getClass().getResource("Things/Ticket.png").toExternalForm()));
         thingImages.put("stick", new Image(getClass().getResource("Things/Ticket.png").toExternalForm()));
+        //change
 
 
     }
