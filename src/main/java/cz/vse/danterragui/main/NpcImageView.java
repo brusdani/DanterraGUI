@@ -5,7 +5,12 @@ import javafx.scene.image.ImageView;
 
 import java.util.HashMap;
 import java.util.Map;
-
+/**
+ * Class NpcImageView - Defines how should npc's ImageView looks like
+ * Npc image view is important for npc dialogue
+ * @author Daniel Brus
+ * @version 1.0 , October 2023
+ */
 public class NpcImageView extends ImageView {
     /**
      * Constructor

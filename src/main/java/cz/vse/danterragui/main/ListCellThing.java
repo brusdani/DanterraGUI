@@ -37,7 +37,15 @@ public class ListCellThing extends ListCell<Thing> {
         thingImages.put("advice_u", new Image(getClass().getResource("Things/Advice.jpg").toExternalForm()));
         thingImages.put("moonstone", new Image(getClass().getResource("Things/Moon.jpg").toExternalForm()));
         thingImages.put("sunstone", new Image(getClass().getResource("Things/Sun.png").toExternalForm()));
+        thingImages.put("magicRod_u", new Image(getClass().getResource("Things/Magic_Rod.jpg").toExternalForm()));
+        thingImages.put("fountain", new Image(getClass().getResource("Things/Fountain.png").toExternalForm()));
+        thingImages.put("bookcase", new Image(getClass().getResource("Things/Bookcase.jpg").toExternalForm()));
         thingImages.put("ticket", new Image(getClass().getResource("Things/Ticket.png").toExternalForm()));
+        thingImages.put("pillar", new Image(getClass().getResource("Things/Pillar.png").toExternalForm()));
+        thingImages.put("memberberries", new Image(getClass().getResource("Things/Memberberry.jpg").toExternalForm()));
+        thingImages.put("throne", new Image(getClass().getResource("Things/Ticket.png").toExternalForm()));
+        thingImages.put("stick", new Image(getClass().getResource("Things/Ticket.png").toExternalForm()));
+
 
     }
     /**
