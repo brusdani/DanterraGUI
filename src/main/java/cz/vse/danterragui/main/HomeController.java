@@ -638,6 +638,10 @@ public class HomeController {
             updateNpcList();
         });
     }
+
+    /**
+     * Executes sail command and makes button invisible after execution
+     */
     @FXML
     private void onSailButtonClick() {
         String command = PrikazSail.NAZEV;
