@@ -130,6 +130,7 @@ public class HomeController {
         npcPanel.setCellFactory(param -> new ListCellNpc());
         showInvisibleButton();
         makeFireIVButtonVisible();
+        npcLabel.setVisible(false);
     }
 
     /**
@@ -298,6 +299,7 @@ public class HomeController {
         if (!hra.getAiba().isSummoned()) {
             String command = PrikazCallAiba.NAZEV;
             processCommand(command);
+            npcLabel.setVisible(true);
             aibaButton.setText("aibaScan");
         } else {
             String command = PrikazAibaScan.NAZEV;
@@ -358,6 +360,8 @@ public class HomeController {
         if (command.startsWith("talkTo")) {
             String npcName = command.substring("talkTo ".length());
             Image npcImage = npcImageView.getImage(npcName);
+            imageView.setFitWidth(140);
+            imageView.setPreserveRatio(false);
 
             if (npcImage != null && !result.equals("Nikdo takový tu není")) {
                 imageView.setImage(npcImage);

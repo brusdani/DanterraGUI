@@ -1,5 +1,6 @@
 package cz.vse.danterragui.main;
 
+import cz.vse.danterragui.logika.Npc;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
