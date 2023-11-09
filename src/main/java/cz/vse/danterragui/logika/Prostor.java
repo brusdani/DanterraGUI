@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
  * @author Michael Kolling, Lubos Pavlicek, Jarmila Pavlickova
  * @version pro školní rok 2016/2017
  *
- * Updated in October 2023
+ * Updated in November 2023
  * @author Daniel Brus
  */
 public class Prostor implements PredmetPozorovani {
@@ -173,6 +173,7 @@ public class Prostor implements PredmetPozorovani {
 
     public void addThing(Thing thing) {
         things.put(thing.getName(), thing);
+        notifyObserver(ZmenaHry.STAV_PROSTORU);
     }
 
     /**
@@ -181,6 +182,7 @@ public class Prostor implements PredmetPozorovani {
      */
     public void removeThing(String nameThing) {
         things.remove(nameThing);
+        notifyObserver(ZmenaHry.STAV_PROSTORU);
     }
 
     /**

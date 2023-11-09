@@ -27,7 +27,7 @@ import java.util.Optional;
  * Class HomeController - Controller class for the game's graphical user interface (GUI).
  * Handles user interactions and updates the game state accordingly.
  * @author Daniel Brus
- * @version 1.0 , October 2023
+ * @version 1.0 , November 2023
  */
 
 public class HomeController {
@@ -103,7 +103,7 @@ public class HomeController {
         roomPanel.setItems(roomContents);
         npcPanel.setItems(roomNpcs);
         setPlayerStartingLocation();
-        registerStavHryObserver();
+        registerStavProstoruObserver();
         hra.getHerniPlan().registruj(ZmenaHry.ZMENA_MISTNOSTI, () -> {
             updateExitPanel();
             updatePlayerLocation();
@@ -112,12 +112,11 @@ public class HomeController {
             updateRoomContents();
             updateMinimap();
             makeSailButtonVisible();
-            registerStavHryObserver();
+            registerStavProstoruObserver();
             makeFireIVButtonVisible();
         });
         hra.getInventory().registruj(ZmenaHry.STAV_INVENTARE, () -> {
             updateInventory();
-            updateRoomContents();
             makeSailButtonVisible();
             makeFireIVButtonVisible();
         });
@@ -252,41 +251,21 @@ public class HomeController {
         String command = playerInput.getText();
         playerInput.clear();
         processCommand(command);
-        //updateInventory();
-        if (hra.getHerniPlan().getAktualniProstor().isWasScanned()) {
-            //updateRoomContents();
-            //updateRiddle();
-            //updateNpcList();
-            //} else {
-            //roomContents.clear();
-            //answerOutput.clear();
-            //roomNpcs.clear();
-        }
-        //hra.getHerniPlan().getAktualniProstor().registruj(ZmenaHry.STAV_HRY,() -> aktualizuj());
         exitPanel.refresh();
         inventoryPanel.refresh();
         roomPanel.refresh();
     }
 
     /**
-     * Handles answer input
+     * Handles answer input from the play
      *
      * @param event - Click on answer button
      */
     @FXML
     private void onAnswerButtonClick(ActionEvent event) {
         String playerAnswer = "answer " + answerInput.getText();
-        //String answer = answerInput.getText();
         answerInput.clear();
         processCommand(playerAnswer);
-//        if(hra.getHerniPlan().getAktualniProstor().getRiddle()!=null) {
-//            if (answer.equals(hra.getHerniPlan().getAktualniProstor().getRiddle().getAnswer())) {
-//                updateInventory();
-//                hra.getHerniPlan().getAktualniProstor().setRiddle(null);
-//                updateRiddle();
-//                inventoryPanel.refresh();
-//            }
-//        }
     }
 
     /**
@@ -304,10 +283,6 @@ public class HomeController {
         } else {
             String command = PrikazAibaScan.NAZEV;
             processCommand(command);
-//            updateRoomContents();
-//            updateRiddle();
-//            updateNpcList();
-//            updateExitPanel();
         }
     }
 
@@ -349,7 +324,7 @@ public class HomeController {
     }
 
     /**
-     * Handles interaction with NPCs
+     * Handles npc dialogues and npc responds to the player
      *
      * @param command   - player's command
      * @param result    - Result of the command
@@ -411,7 +386,7 @@ public class HomeController {
 
     /**
      * Starts a new game
-     *
+     * resets everything into initial state of the game
      * @param event - player clicks on new game button
      */
     @FXML
@@ -434,7 +409,8 @@ public class HomeController {
     }
 
     /**
-     * Clears every piece of UI when the game restarts
+     * Clears every piece of UI
+     * Called when the game restarts
      */
     @FXML
     private void clearEverything() {
@@ -489,23 +465,14 @@ public class HomeController {
             String destinationString = destination.toString().replace("(Locked)", "");
             String command = PrikazUnlock.NAZEV + " " + destinationString;
             processCommand(command);
-            updateExitList();
-            //updateInventory();
+            updateExitPanel();
             return;
         }
         String command = PrikazJdi.NAZEV + " " + destination;
         processCommand(command);
-        //if (hra.getHerniPlan().getAktualniProstor().isWasScanned()){
-        //updateRoomContents();
-        //updateRiddle();
-        //} else {
-        //roomContents.clear();
-        //answerOutput.clear();
-        //roomNpcs.clear();
-        //}
-        //hra.getHerniPlan().getAktualniProstor().registruj(ZmenaHry.STAV_INVENTARE,() -> aktualizuj());
-        exitPanel.refresh();
-        roomPanel.refresh();
+        //updateExitPanel();
+        //exitPanel.refresh();
+        //roomPanel.refresh();
 
     }
 
@@ -520,16 +487,10 @@ public class HomeController {
         if (targetItem == null) return;
         String command = PrikazPickup.NAZEV + " " + targetItem;
         processCommand(command);
-        //updateInventory();
-        //updateRoomContents();
-        inventoryPanel.refresh();
+        //inventoryPanel.refresh();
         roomPanel.refresh();
     }
 
-    /**
-     * Allows players to talkTo NPCs by clicking on npc panel
-     * @param mouseEvent click on npcListCell
-     */
 //    @FXML
 //    private void clickNpcPanel(MouseEvent mouseEvent){
 //        Npc targetNpc = npcPanel.getSelectionModel().getSelectedItem();
@@ -614,11 +575,9 @@ public class HomeController {
                     String itemName = itemResult.get().trim();
                     command = PrikazGiveItem.NAZEV + " " + itemName + " " + targetNpc.getName();
                 } else {
-                    // Handle empty or canceled input
                     return;
                 }
             } else {
-                // Handle unexpected choice
                 return;
             }
 
@@ -636,7 +595,7 @@ public class HomeController {
      * the user interface to reflect those changes. The elements updated include the exit panel, room contents, riddles,
      * and the list of non-playable characters (NPCs).
      */
-    private void registerStavHryObserver() {
+    private void registerStavProstoruObserver() {
         hra.getHerniPlan().getAktualniProstor().registruj(ZmenaHry.STAV_PROSTORU, () -> {
             updateExitPanel();
             updateRoomContents();

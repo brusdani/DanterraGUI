@@ -57,7 +57,7 @@ public class HerniPlan implements PredmetPozorovani {
         Thing bookcase = new Thing("bookcase",false, false, false);
         Thing treasureRoomKey = new Thing("treasureRoom_key", true, false, true);
         Thing note = new Thing("note_u", true, true, false);
-        note.setSpecialEffect("Capten lykes his wyne red");
+        note.setSpecialEffect("Capten lykes his wyne red... what could it possibly mean?");
         Thing moonstone = new Thing("moonstone", true, false,true);
         Thing gateKey = new Thing("gate_key", true, false, true);
         Thing chain = new Thing("chain", true, false, false);
