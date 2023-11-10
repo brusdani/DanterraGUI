@@ -534,8 +534,8 @@ public class HomeController {
                 String command = PrikazDrop.NAZEV + " " + targetItem;
                 processCommand(command);
             }
-            updateInventory();
-            updateRoomContents();
+            //updateInventory();
+            //updateRoomContents();
             inventoryPanel.refresh();
             roomPanel.refresh();
         }
@@ -583,7 +583,7 @@ public class HomeController {
 
             processCommand(command);
             updateNpcList();
-            updateInventory();
+            //updateInventory();
         }
     }
 
