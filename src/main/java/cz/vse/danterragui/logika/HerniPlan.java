@@ -170,9 +170,11 @@ public class HerniPlan implements PredmetPozorovani {
         cliffs.addNpc(ravi);
         monaxia.addNpc(kira);
         babel.addNpc(keeper);
-        cellar.addNpc(keeper);
-        cellar.addThing(ticket);
-        cellar.setVychod(pub);
+
+        //used for playtesting
+        //cellar.addNpc(keeper);
+        //cellar.addThing(ticket);
+        //cellar.setVychod(pub);
 
         // přiřazují se průchody mezi prostory (sousedící prostory)
         startingRoom.setVychod(lockedRoom);
