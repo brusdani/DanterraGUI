@@ -3,6 +3,9 @@ package cz.vse.danterragui.logika;
 import cz.vse.danterragui.uiText.TextoveRozhrani;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.HashMap;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class EndingTest {
@@ -18,7 +21,7 @@ public class EndingTest {
     @BeforeEach
     public void setup(){
         hra = new Hra();
-        inventory = new Inventory();
+        inventory = new Inventory(new HashMap<>());
         talkTo = new PrikazTalkTo(hra.getHerniPlan(),npc,hra);
         ending = new Ending(inventory);
         testRoom.addNpc(npc);

@@ -4,12 +4,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
 public class PrikazShowInventoryTest {
     private Hra hra;
-    private Inventory inventory = new Inventory();
+    private Inventory inventory = new Inventory(new HashMap<>());
     private Thing keys = new Thing("keys", true,false,true);
 
     private PrikazShowInventory showInventory;

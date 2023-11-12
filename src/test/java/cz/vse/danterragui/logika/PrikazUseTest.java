@@ -8,9 +8,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
+
 public class PrikazUseTest {
     private Hra hra;
-    private Inventory inventory = new Inventory();
+    private Inventory inventory = new Inventory(new HashMap<>());
     private Thing broom = new Thing("broom", true, true, false);
     private Thing socks = new Thing("socks", true, false, false);
     private PrikazUse use;

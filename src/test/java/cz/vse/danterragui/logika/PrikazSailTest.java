@@ -3,11 +3,13 @@ package cz.vse.danterragui.logika;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PrikazSailTest {
     private Hra hra;
-    private Inventory inventory = new Inventory();
+    private Inventory inventory = new Inventory(new HashMap<>());
     private PrikazSail sail;
     private Prostor testRoom = new Prostor("testRoom", "test",false,null);
     private Thing ticket = new Thing("ticket", true, false, true);

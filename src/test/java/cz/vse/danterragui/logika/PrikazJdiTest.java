@@ -3,6 +3,8 @@ package cz.vse.danterragui.logika;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PrikazJdiTest {
@@ -20,7 +22,7 @@ public class PrikazJdiTest {
     public void setup(){
         hra = new Hra();
         aiba = new Aiba(true);
-        inventory = new Inventory();
+        inventory = new Inventory(new HashMap<>());
         inventory.addThing(keys);
         prikazJdi = new PrikazJdi(hra.getHerniPlan(),aiba);
         hra.getHerniPlan().setAktualniProstor(testRoom);

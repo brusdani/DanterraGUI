@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class PrikazUnlockTest {
     private Hra hra;
-    private Inventory inventory = new Inventory();
+    private Inventory inventory = new Inventory(new HashMap<>());
     private Thing keys = new Thing("keys", true, false, true);
 
     private Prostor lockedRoom = new Prostor("lockedRoom", "locked", true, keys);

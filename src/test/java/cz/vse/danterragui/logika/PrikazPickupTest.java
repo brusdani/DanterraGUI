@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class PrikazPickupTest {
     private Hra hra;
-    private Inventory inventory = new Inventory();
+    private Inventory inventory = new Inventory(new HashMap<>());
     private Thing keys = new Thing("keys", true,false,true);
     private Thing broom = new Thing("broom", true,false, false);
     private Thing piano = new Thing("piano", false, true, false);
