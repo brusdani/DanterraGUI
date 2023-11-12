@@ -230,12 +230,19 @@ public class HomeController {
         player.setLayoutY(roomCoordinates.get(prostor).getY());
     }
 
+    /**
+     * When player reaches Mare Lamentorum, changes the minimap for the second picture
+     */
     @FXML
     private void updateMinimap() {
         if (hra.getHerniPlan().getAktualniProstor().getNazev().equals("mare_lamentorum")) {
             minimap.setImage(new Image(getClass().getResource("HerniPlan/DanterraMap2.jpg").toExternalForm()));
         }
     }
+
+    /**
+     * Resets minimap back to first picture. Called at the start of a new game
+     */
     @FXML
     private void resetMinimap(){
         minimap.setImage(new Image(getClass().getResource("HerniPlan/DanterraMap1.jpg").toExternalForm()));
@@ -257,7 +264,7 @@ public class HomeController {
     }
 
     /**
-     * Handles answer input from the play
+     * Handles answer input from the player
      *
      * @param event - Click on answer button
      */
@@ -487,7 +494,6 @@ public class HomeController {
         if (targetItem == null) return;
         String command = PrikazPickup.NAZEV + " " + targetItem;
         processCommand(command);
-        //inventoryPanel.refresh();
         roomPanel.refresh();
     }
 

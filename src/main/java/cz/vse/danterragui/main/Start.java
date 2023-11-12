@@ -40,6 +40,11 @@ public class Start extends Application
         }
     }
 
+    /**
+     * The main entry point for JavaFX applications.
+     * @param primaryStage The primary stage for this application, onto which the application scene can be set.
+     * @throws Exception
+     */
     @Override
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader();
