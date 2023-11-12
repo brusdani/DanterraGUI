@@ -45,7 +45,7 @@
             <AnchorPane fx:id="backgroundPane" layoutY="319.0" prefHeight="336.0" prefWidth="507.0">
                <children>
                   <ImageView fx:id="npcImage" fitHeight="139.0" fitWidth="138.0" pickOnBounds="true" preserveRatio="true" />
-                  <TextArea fx:id="npcDialogue" editable="false" layoutX="-1.0" layoutY="164.0" prefHeight="139.0" prefWidth="508.0" />
+                  <TextArea fx:id="npcDialogue" editable="false" layoutX="-1.0" layoutY="164.0" prefHeight="157.0" prefWidth="508.0" />
                   <Label fx:id="npcLabel" alignment="CENTER" layoutY="139.0" prefHeight="26.0" prefWidth="138.0" />
                   <Button fx:id="aibaButton" layoutX="222.0" layoutY="43.0" mnemonicParsing="false" onAction="#onAibaButtonClick" prefHeight="96.0" prefWidth="137.0" text="CallAiba" />
                   <Button fx:id="okButton" layoutX="449.0" layoutY="132.0" mnemonicParsing="false" onAction="#onOkButtonClick" prefHeight="26.0" prefWidth="51.0" text="Ok" />
@@ -57,12 +57,12 @@
       </AnchorPane>
       <AnchorPane layoutX="877.0" layoutY="29.0" prefHeight="690.0" prefWidth="408.0">
          <children>
-            <ListView fx:id="exitPanel" layoutX="3.0" layoutY="373.0" onMouseClicked="#clickExitPanel" prefHeight="265.0" prefWidth="394.0" />
-            <TitledPane animated="false" layoutX="-4.0" prefHeight="336.0" prefWidth="402.0" text="Minimap">
+            <ListView fx:id="exitPanel" layoutX="1.0" layoutY="346.0" onMouseClicked="#clickExitPanel" prefHeight="293.0" prefWidth="396.0" />
+            <TitledPane animated="false" layoutX="-4.0" prefHeight="316.0" prefWidth="407.0" text="Minimap">
                <content>
-                  <HBox alignment="CENTER" prefHeight="310.0" prefWidth="392.0">
+                  <HBox alignment="CENTER" prefHeight="306.0" prefWidth="406.0">
                      <children>
-                        <AnchorPane prefHeight="290.0" prefWidth="428.0">
+                        <AnchorPane prefHeight="286.0" prefWidth="386.0">
                            <children>
                               <ImageView fx:id="minimap" fitHeight="241.0" fitWidth="378.0" layoutX="6.0" layoutY="32.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -80,7 +80,7 @@
                   </HBox>
                </content>
             </TitledPane>
-            <Label layoutX="3.0" layoutY="356.0" prefHeight="18.0" prefWidth="123.0" text="Východy:" />
+            <Label layoutX="1.0" layoutY="326.0" prefHeight="18.0" prefWidth="123.0" text="Východy:" />
          </children>
       </AnchorPane>
       <AnchorPane layoutX="1.0" layoutY="30.0" prefHeight="374.0" prefWidth="351.0">
@@ -89,7 +89,7 @@
             <Label layoutX="14.0" layoutY="6.0" prefHeight="26.0" prefWidth="58.0" text="Inventory:" />
          </children>
       </AnchorPane>
-      <TabPane fx:id="tabPane" layoutX="20.0" layoutY="404.0" prefHeight="306.0" prefWidth="314.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane fx:id="tabPane" layoutX="6.0" layoutY="404.0" prefHeight="306.0" prefWidth="336.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab text="Things">
                <content>

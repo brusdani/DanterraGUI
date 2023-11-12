@@ -51,6 +51,9 @@ public class PrikazJdi implements IPrikaz {
                 return "dveře do místnosti "+ sousedniProstor.getNazev() +" jsou zamčené";
             }
             plan.setAktualniProstor(sousedniProstor);
+            if(!aiba.isSummoned()){
+                return "Summoning Aiba is highly recommended for your experience";
+            }
             if (!sousedniProstor.isWasScanned()) {
                 return sousedniProstor.aibaDescription();
             } return sousedniProstor.aibaScan();
