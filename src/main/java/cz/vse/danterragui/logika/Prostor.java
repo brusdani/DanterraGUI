@@ -70,7 +70,7 @@ public class Prostor implements PredmetPozorovani {
 
     public void setLock(boolean locked) {
         this.locked = locked;
-        System.out.println("observer notified");
+        //System.out.println("observer notified");
         notifyObserver(ZmenaHry.STAV_PROSTORU);
     }
 

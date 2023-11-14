@@ -37,7 +37,7 @@ public class Inventory implements PredmetPozorovani {
      */
     public HashMap<String,Thing> addThing(Thing item) {
         items.put(item.getName(), item);
-        System.out.println("We added the item: " + item.getName());
+        //System.out.println("We added the item: " + item.getName());
         upozorniPozorovatele(ZmenaHry.STAV_INVENTARE);
         return items;
     }

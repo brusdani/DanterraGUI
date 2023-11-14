@@ -98,7 +98,7 @@ public class Thing {
      */
 
     public String useItem(){
-        System.out.println("You used: " + getName());
+        //System.out.println("You used: " + getName());
         return getSpecialEffect();
     }
 
