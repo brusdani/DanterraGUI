@@ -332,7 +332,6 @@ public class HomeController {
 
     /**
      * Handles npc dialogues and npc responds to the player
-     *
      * @param command   - player's command
      * @param result    - Result of the command
      * @param imageView - NPC image
@@ -461,7 +460,8 @@ public class HomeController {
 
     /**
      * Makes travelling between rooms possible on mouse click
-     *
+     * Checks if destination is locked - if so, executes unlock command
+     * otherwise "jdi" command is executed
      * @param mouseEvent click on Exit panel
      */
     @FXML
@@ -485,7 +485,7 @@ public class HomeController {
 
     /**
      * Allows players to pickup room contents by clicking on them
-     *
+     * Pickup command is executed after click
      * @param mouseEvent click on Thing list cell in roomContents
      */
     @FXML
@@ -510,7 +510,7 @@ public class HomeController {
     /**
      * Gives players opportunity to interact with items in inventory
      * Shows pop up that gives an option to drop or use an item
-     *
+     * Depending on player's choice executes drop or use command
      * @param mouseEvent click in item in the inventory
      */
     @FXML
@@ -549,6 +549,8 @@ public class HomeController {
     /**
      * Allows players to interact NPCs by clicking on npc panel
      * Shows pop up that gives an option to talkTo npc or to giveItem to npc
+     * if talkTo is chosen - executes talkTo command
+     * if GiveItem is chosen dialog window asking for item name is shown
      * @param mouseEvent click on npcListCell
      */
     @FXML
