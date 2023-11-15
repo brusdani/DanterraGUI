@@ -5,9 +5,54 @@
     <title>Help</title>
 </head>
 <body>
-    help for the player:<br>
-    Each room has to be scanned before its contents (items, npcs, riddles)<br>
+    <strong>KeyNotes:</strong><br>
+    Each room has to be scanned before its contents (items, npcs, riddles) appear<br>
     Items that can be used, have _u in their name.<br>
     Giving item to npc requires typing the name of the item<br>
+
+    <strong>Uživatelská příručka</strong><br>
+    Semestrální práce pro předmět 4IT115 – Programování v Javě<br>
+    Svět Danterry ovládla temnota. Je na hráči, aby přivedl do světa zpět světlo. Pomoci mu v tom<br>
+    může companion Aiba.<br>
+
+    <strong>Cíl hry</strong><br>
+    Cílem hry je posbírat sunstone a moonstone a s jejich pomocí porazit Keepera ve věži Babel.<br>
+    <strong>Herní plán</strong><br>
+    Hra začíná v místnosti Cellar. Během průchodu hrou může hráč sbírat předměty (maximálně
+    10).<br>
+    <strong>Dostupné příkazy:</strong><br>
+    Dostupně příkazy lze zobrazit přes příkaz nápověda<br>
+    <code>callAiba</code> (bez parametru)– zavolá Aibu na pomoc a zpřístupní schopnosti Aiby.<br>
+    <code>aibaScan</code> (bez parametru)– Prohledá aktuální prostor a zobrazí hráči všechny informace o ní.<br>
+    Žádné informace o prostoru se nezobrazí, dokud prostor není prohledaný.<br>
+    <code>pickup</code> (název Věci)– Sebere věc z místnosti (pouze pokud je věc sebratelná)<br>
+    <code>drop</code> (název Věc) – Vyhodí věc z inventáře a věc se objeví v dané místnosti<br>
+    <code>answer</code> (String)– Odpovídá na hádanku – odpověď na hádanku je vždy String, pokud je<br>
+    odpověď shodná, hráč splní hádanku a dostane odměnu.<br>
+    <code>giveItem</code>(Věc, NPC) - ve hře se vyskytují NPC, které dávají hráči úkoly (přines npc věc).<br>
+    Pokud hráč předá npc správnou věc, dostane odměnu v podobě jiné věci.<br>
+    <code>talkTo</code> (NPC) – Zobrazí dialog s NPC. Dialog s NPC Keeper končí hru.<br>
+    <code>unlock</code> (Název místnosti) – Odemkne zamčenou místnost, pokud hráč vlastní správný. Pro<br>
+    usnadnění rozpoznávání se tyto itemy vždy jmenují názevMístnost_key<br>
+    <code>use</code> (Věc) – Některé věci mají se dají „použít“ a mají „speciální efekt“. Většinou zobrazují<br>
+    nápovědu k hádance. Ve hře mají značení _u.<br>
+    <strong>Seznam použitelných věcí:</strong> note, advice, magicRod.<br>
+    Speciální příkazy – lze je použít pouze jednou za hru – poté jsou Itemy které fungují jako<br>
+    podmínka pro aktivaci příkazů trvale zničeny.<br>
+    <strong>sail</strong> (bez parametru)– potřebný item: ticket<br>
+    Transportuje hráče do Mare Lamentorum. Po použití příkazu sail bude hráči znemožněn<br>
+    přístup do některých lokací!<br>
+    <strong>fireIV</strong>(bez parametru) – potřebný item: MagicalRod<br>
+    Pohyb po mapě<br>
+    Po mapě se lze pohybovat pomocí příkazu jdi (název místnosti)<br>
+    Některé místnosti mohou být zamčené.<br>
+    <strong>Předměty</strong><br>
+    Hráč může ve hře sbírat předměty – né všechny jsou ale přenositelné. Další omezením je, že<br>
+    inventář má kapacitu pouze pro 10 předmětů.<br>
+    Předměty sloužící jako klíče mají ve jménu _key<br>
+    Použitelné předměty mají ve jménu _u<br>
+    <strong>Hádanky</strong><br>
+    Ve hře se vyskytují hádanky. Ke každé hádance se v místnosti nachází i nápověda. Odpovědí<br>
+    je vždy 1 slovo.<br>
 </body>
 </html>
